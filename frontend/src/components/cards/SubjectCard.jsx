@@ -1,0 +1,1 @@
+﻿// Subject card component
