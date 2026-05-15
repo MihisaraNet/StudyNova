@@ -1,0 +1,1 @@
+﻿// Assignment card component
