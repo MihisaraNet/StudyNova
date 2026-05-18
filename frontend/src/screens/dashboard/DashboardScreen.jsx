@@ -11,15 +11,21 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import useAuthStore from '../../store/authStore';
+import useGpaStore from '../../store/gpaStore';
 
-export default function DashboardScreen() {
+export default function DashboardScreen({ navigation }) {
   const { user } = useAuthStore();
+  const { gpaData, fetchGPA } = useGpaStore();
+
+  React.useEffect(() => {
+    fetchGPA();
+  }, [fetchGPA]);
 
   const quickStats = [
     { icon: 'book-outline',          label: 'Subjects',    value: '0', color: COLORS.primary },
     { icon: 'checkmark-circle-outline', label: 'Assignments', value: '0', color: COLORS.warning },
     { icon: 'calendar-outline',      label: 'Sessions',    value: '0', color: COLORS.success },
-    { icon: 'school-outline',        label: 'GPA',         value: '—', color: COLORS.secondary },
+    { icon: 'school-outline',        label: 'GPA',         value: gpaData?.overallGPA?.toFixed(2) || '—', color: COLORS.secondary, onPress: () => navigation.navigate('GPA') },
   ];
 
   return (
@@ -63,13 +69,13 @@ export default function DashboardScreen() {
         <Text style={styles.sectionTitle}>Overview</Text>
         <View style={styles.statsGrid}>
           {quickStats.map((stat, i) => (
-            <View key={i} style={styles.statCard}>
+            <TouchableOpacity key={i} style={styles.statCard} onPress={stat.onPress} activeOpacity={stat.onPress ? 0.7 : 1}>
               <View style={[styles.statIcon, { backgroundColor: stat.color + '18' }]}>
                 <Ionicons name={stat.icon} size={22} color={stat.color} />
               </View>
               <Text style={styles.statValue}>{stat.value}</Text>
               <Text style={styles.statLabel}>{stat.label}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
 

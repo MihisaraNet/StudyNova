@@ -8,6 +8,7 @@ import SubjectNavigator     from './SubjectNavigator';
 import AssignmentListScreen from '../screens/assignments/AssignmentListScreen';
 import TimetableScreen      from '../screens/timetable/TimetableScreen';
 import ProfileScreen        from '../screens/profile/ProfileScreen';
+import GPACalculatorScreen  from '../screens/gpa/GPACalculatorScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,6 +17,7 @@ const tabIcons = {
   Subjects:    ['book',         'book-outline'],
   Assignments: ['checkmark-circle', 'checkmark-circle-outline'],
   Timetable:   ['calendar',     'calendar-outline'],
+  GPA:         ['school',       'school-outline'],
   Profile:     ['person',       'person-outline'],
 };
 
@@ -51,6 +53,7 @@ export default function MainTabNavigator() {
       <Tab.Screen name="Subjects"       component={SubjectNavigator} />
       <Tab.Screen name="Assignments"    component={AssignmentListScreen} />
       <Tab.Screen name="Timetable"      component={TimetableScreen} />
+      <Tab.Screen name="GPA"            component={GPACalculatorScreen} />
       <Tab.Screen name="Profile"        component={ProfileScreen} />
     </Tab.Navigator>
   );
