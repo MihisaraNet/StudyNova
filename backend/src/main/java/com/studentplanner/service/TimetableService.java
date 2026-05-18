@@ -1,2 +1,2 @@
-﻿package com.studentplanner.service;
+package com.studentplanner.service;
 // TimetableService
