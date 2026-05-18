@@ -1,2 +1,2 @@
-﻿package com.studentplanner.dto.request;
+package com.studentplanner.dto.request;
 // AIPromptRequest DTO
