@@ -98,8 +98,8 @@ export default function SplashScreen() {
           alignItems: 'center',
         }}
       >
-        <Text style={styles.appName}>Smart Study</Text>
-        <Text style={styles.appNameAccent}>Planner</Text>
+        <Text style={styles.appName}>Study</Text>
+        <Text style={styles.appNameAccent}>Nova</Text>
         <Text style={styles.tagline}>Your academic success companion</Text>
       </Animated.View>
 
