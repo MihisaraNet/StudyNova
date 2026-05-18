@@ -23,8 +23,15 @@ export default function DashboardScreen() {
   ];
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <View style={styles.mainContainer}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <LinearGradient
+        colors={['#0F0C29', '#302B63', '#24243E']}
+        style={StyleSheet.absoluteFill}
+        start={{ x: 0.2, y: 0 }}
+        end={{ x: 0.8, y: 1 }}
+      />
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
       {/* Header */}
       <LinearGradient
@@ -93,7 +100,8 @@ export default function DashboardScreen() {
           ))}
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -105,7 +113,8 @@ function getGreeting() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
+  mainContainer: { flex: 1 },
+  container: { flex: 1 },
   header: {
     paddingTop: 56,
     paddingBottom: 32,
@@ -134,27 +143,24 @@ const styles = StyleSheet.create({
   statCard: {
     flex: 1,
     minWidth: '44%',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderRadius: 16,
     padding: 16,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
+    borderWidth: 1.5,
+    borderColor: COLORS.borderLight,
   },
   statIcon:   { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
   statValue:  { fontSize: 22, fontWeight: '800', color: COLORS.textPrimary },
   statLabel:  { fontSize: 12, color: COLORS.textSecondary, fontWeight: '500', marginTop: 2 },
   welcomeCard: {
-    backgroundColor: COLORS.primaryPale,
+    backgroundColor: COLORS.surfaceAlt,
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
     marginBottom: 20,
-    borderWidth: 1,
-    borderColor: COLORS.primaryLight + '40',
+    borderWidth: 1.5,
+    borderColor: 'rgba(108,99,255,0.2)',
   },
   welcomeEmoji: { fontSize: 36, marginBottom: 10 },
   welcomeTitle: { fontSize: 16, fontWeight: '700', color: COLORS.primary, marginBottom: 8 },
@@ -163,15 +169,12 @@ const styles = StyleSheet.create({
   actionBtn: {
     flex: 1,
     minWidth: '44%',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderRadius: 14,
     padding: 16,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 1,
+    borderWidth: 1.5,
+    borderColor: COLORS.borderLight,
   },
   actionIcon:  { width: 48, height: 48, borderRadius: 14, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
   actionLabel: { fontSize: 12, fontWeight: '600', color: COLORS.textPrimary, textAlign: 'center' },
