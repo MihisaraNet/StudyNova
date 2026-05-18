@@ -1,2 +1,2 @@
-﻿package com.studentplanner.config;
+package com.studentplanner.config;
 // MongoDB configuration
