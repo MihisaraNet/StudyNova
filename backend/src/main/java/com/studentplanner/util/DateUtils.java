@@ -1,2 +1,2 @@
-﻿package com.studentplanner.util;
+package com.studentplanner.util;
 // Date utility methods
