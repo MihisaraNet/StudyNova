@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/colors';
 
 import DashboardScreen      from '../screens/dashboard/DashboardScreen';
-import SubjectListScreen    from '../screens/subjects/SubjectListScreen';
+import SubjectNavigator     from './SubjectNavigator';
 import AssignmentListScreen from '../screens/assignments/AssignmentListScreen';
 import TimetableScreen      from '../screens/timetable/TimetableScreen';
 import ProfileScreen        from '../screens/profile/ProfileScreen';
@@ -27,8 +27,8 @@ export default function MainTabNavigator() {
         tabBarActiveTintColor:   COLORS.primary,
         tabBarInactiveTintColor: COLORS.textLight,
         tabBarStyle: {
-          backgroundColor: COLORS.white,
-          borderTopColor:  COLORS.border,
+          backgroundColor: '#161334', // Dark semi-transparent or solid dark
+          borderTopColor:  'rgba(255,255,255,0.06)',
           borderTopWidth:  1,
           height: 62,
           paddingBottom: 8,
@@ -48,7 +48,7 @@ export default function MainTabNavigator() {
       })}
     >
       <Tab.Screen name="Dashboard"      component={DashboardScreen} />
-      <Tab.Screen name="Subjects"       component={SubjectListScreen} />
+      <Tab.Screen name="Subjects"       component={SubjectNavigator} />
       <Tab.Screen name="Assignments"    component={AssignmentListScreen} />
       <Tab.Screen name="Timetable"      component={TimetableScreen} />
       <Tab.Screen name="Profile"        component={ProfileScreen} />
