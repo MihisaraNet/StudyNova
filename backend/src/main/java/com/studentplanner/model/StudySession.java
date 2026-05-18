@@ -1,2 +1,2 @@
-﻿package com.studentplanner.model;
+package com.studentplanner.model;
 // StudySession document model
