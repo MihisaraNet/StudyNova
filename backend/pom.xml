@@ -14,8 +14,8 @@
     <groupId>com.studentplanner</groupId>
     <artifactId>student-planner</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>student-planner</name>
-    <description>Smart Student Study Planner App - Backend API</description>
+    <name>studynova</name>
+    <description>StudyNova - Backend API</description>
 
     <properties>
         <java.version>17</java.version>
@@ -95,6 +95,19 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
