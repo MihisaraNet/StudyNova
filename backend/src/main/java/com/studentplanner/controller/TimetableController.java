@@ -1,2 +1,2 @@
-﻿package com.studentplanner.controller;
+package com.studentplanner.controller;
 // TimetableController - CRUD /api/timetable
