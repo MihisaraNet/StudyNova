@@ -1,2 +1,2 @@
-﻿package com.studentplanner.controller;
+package com.studentplanner.controller;
 // GPAController - /api/gpa
