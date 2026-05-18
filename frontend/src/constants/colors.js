@@ -1,4 +1,4 @@
-// Color palette for Smart Student Study Planner
+// Color palette for StudyNova
 // Primary: Indigo/Purple — Modern, calm, study-focused
 
 export const COLORS = {
@@ -27,16 +27,16 @@ export const COLORS = {
 
   // ─── Neutrals ──────────────────────────────────
   white:          '#FFFFFF',
-  background:     '#F5F6FA',
-  surface:        '#FFFFFF',
-  surfaceAlt:     '#F0F2FF',
-  border:         '#E8E8F0',
-  borderLight:    '#F0F0F8',
+  background:     '#0F0C29',
+  surface:        'rgba(255,255,255,0.06)',
+  surfaceAlt:     'rgba(108,99,255,0.1)',
+  border:         'rgba(255,255,255,0.12)',
+  borderLight:    'rgba(255,255,255,0.06)',
 
   // ─── Text ──────────────────────────────────────
-  textPrimary:    '#1A1A2E',
-  textSecondary:  '#6B7280',
-  textLight:      '#9CA3AF',
+  textPrimary:    '#FFFFFF',
+  textSecondary:  'rgba(255,255,255,0.6)',
+  textLight:      'rgba(255,255,255,0.4)',
   textOnPrimary:  '#FFFFFF',
 
   // ─── Gradients (use with LinearGradient) ───────
