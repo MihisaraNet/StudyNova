@@ -1,4 +1,4 @@
-﻿# Smart Student Study Planner App
+# StudyNova
 
 > Final Year Project
 
