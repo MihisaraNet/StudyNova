@@ -31,8 +31,15 @@ export default function ProfileScreen() {
   ];
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <View style={styles.mainContainer}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <LinearGradient
+        colors={['#0F0C29', '#302B63', '#24243E']}
+        style={StyleSheet.absoluteFill}
+        start={{ x: 0.2, y: 0 }}
+        end={{ x: 0.8, y: 1 }}
+      />
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
       <LinearGradient
         colors={COLORS.gradientPrimary}
@@ -80,14 +87,16 @@ export default function ProfileScreen() {
           <Text style={styles.logoutText}>Sign Out</Text>
         </TouchableOpacity>
 
-        <Text style={styles.version}>Smart Study Planner v1.0.0</Text>
+        <Text style={styles.version}>StudyNova v1.0.0</Text>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container:   { flex: 1, backgroundColor: COLORS.background },
+  mainContainer: { flex: 1 },
+  container:   { flex: 1 },
   header: {
     paddingTop: 60,
     paddingBottom: 32,
@@ -120,34 +129,31 @@ const styles = StyleSheet.create({
   badgeText: { color: COLORS.white, fontSize: 12, fontWeight: '700' },
   body:      { padding: 20 },
   gpaCard: {
-    backgroundColor: COLORS.primaryPale,
+    backgroundColor: COLORS.surfaceAlt,
     borderRadius: 16,
     padding: 18,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
-    borderWidth: 1,
-    borderColor: COLORS.primaryLight + '30',
+    borderWidth: 1.5,
+    borderColor: 'rgba(108,99,255,0.2)',
   },
   gpaLabel: { fontSize: 14, fontWeight: '600', color: COLORS.primary },
   gpaValue: { fontSize: 20, fontWeight: '800', color: COLORS.primary },
   menu: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    borderWidth: 1.5,
+    borderColor: COLORS.borderLight,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1.5,
     borderBottomColor: COLORS.borderLight,
     gap: 14,
   },
@@ -157,11 +163,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.errorLight,
+    backgroundColor: 'rgba(255,92,106,0.1)',
     borderRadius: 14,
     padding: 16,
     gap: 10,
     marginBottom: 24,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,92,106,0.2)',
   },
   logoutText: { color: COLORS.error, fontSize: 15, fontWeight: '700' },
   version:   { textAlign: 'center', color: COLORS.textLight, fontSize: 12 },
