@@ -1,2 +1,2 @@
-﻿package com.studentplanner.repository;
+package com.studentplanner.repository;
 // StudySessionRepository
