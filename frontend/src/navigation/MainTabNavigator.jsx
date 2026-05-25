@@ -6,7 +6,7 @@ import { COLORS } from '../constants/colors';
 import DashboardScreen      from '../screens/dashboard/DashboardScreen';
 import SubjectNavigator     from './SubjectNavigator';
 import AssignmentListScreen from '../screens/assignments/AssignmentListScreen';
-import TimetableScreen      from '../screens/timetable/TimetableScreen';
+import TimetableNavigator   from './TimetableNavigator';
 import ProfileScreen        from '../screens/profile/ProfileScreen';
 import GPACalculatorScreen  from '../screens/gpa/GPACalculatorScreen';
 
@@ -52,7 +52,7 @@ export default function MainTabNavigator() {
       <Tab.Screen name="Dashboard"      component={DashboardScreen} />
       <Tab.Screen name="Subjects"       component={SubjectNavigator} />
       <Tab.Screen name="Assignments"    component={AssignmentListScreen} />
-      <Tab.Screen name="Timetable"      component={TimetableScreen} />
+      <Tab.Screen name="Timetable"      component={TimetableNavigator} />
       <Tab.Screen name="GPA"            component={GPACalculatorScreen} />
       <Tab.Screen name="Profile"        component={ProfileScreen} />
     </Tab.Navigator>

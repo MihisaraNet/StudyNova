@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import * as SecureStore from 'expo-secure-store';
+import * as storage from '../utils/storage';
 import { TOKEN_KEY, USER_KEY } from '../constants/config';
 import * as authService from '../services/authService';
 
@@ -13,8 +13,8 @@ const useAuthStore = create((set, get) => ({
   // ─── Bootstrap: load persisted session ─────────────────────────────────────
   loadSession: async () => {
     try {
-      const token    = await SecureStore.getItemAsync(TOKEN_KEY);
-      const userJson = await SecureStore.getItemAsync(USER_KEY);
+      const token    = await storage.getItem(TOKEN_KEY);
+      const userJson = await storage.getItem(USER_KEY);
 
       if (token && userJson) {
         set({
@@ -38,8 +38,8 @@ const useAuthStore = create((set, get) => ({
       const response = await authService.register(formData);
       const { token, ...user } = response.data;
 
-      await SecureStore.setItemAsync(TOKEN_KEY, token);
-      await SecureStore.setItemAsync(USER_KEY, JSON.stringify(user));
+      await storage.setItem(TOKEN_KEY, token);
+      await storage.setItem(USER_KEY, JSON.stringify(user));
 
       set({ token, user, isLoggedIn: true });
       return { success: true };
@@ -57,8 +57,8 @@ const useAuthStore = create((set, get) => ({
       const response = await authService.login(email, password);
       const { token, ...user } = response.data;
 
-      await SecureStore.setItemAsync(TOKEN_KEY, token);
-      await SecureStore.setItemAsync(USER_KEY, JSON.stringify(user));
+      await storage.setItem(TOKEN_KEY, token);
+      await storage.setItem(USER_KEY, JSON.stringify(user));
 
       set({ token, user, isLoggedIn: true });
       return { success: true };
@@ -72,14 +72,14 @@ const useAuthStore = create((set, get) => ({
   // ─── Logout ─────────────────────────────────────────────────────────────────
   logout: async () => {
     try { await authService.logout(); } catch {}  // fire-and-forget
-    await SecureStore.deleteItemAsync(TOKEN_KEY);
-    await SecureStore.deleteItemAsync(USER_KEY);
+    await storage.deleteItem(TOKEN_KEY);
+    await storage.deleteItem(USER_KEY);
     set({ user: null, token: null, isLoggedIn: false, error: null });
   },
 
   // ─── Update profile locally ─────────────────────────────────────────────────
   setUser: async (updatedUser) => {
-    await SecureStore.setItemAsync(USER_KEY, JSON.stringify(updatedUser));
+    await storage.setItem(USER_KEY, JSON.stringify(updatedUser));
     set({ user: updatedUser });
   },
 
