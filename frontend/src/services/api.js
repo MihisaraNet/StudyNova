@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as SecureStore from 'expo-secure-store';
+import * as storage from '../utils/storage';
 import { API_BASE_URL, API_TIMEOUT, TOKEN_KEY } from '../constants/config';
 
 // ─── Create Axios instance ────────────────────────────────────────────────────
@@ -16,7 +16,7 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     try {
-      const token = await SecureStore.getItemAsync(TOKEN_KEY);
+      const token = await storage.getItem(TOKEN_KEY);
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -37,7 +37,7 @@ api.interceptors.response.use(
 
       if (status === 401) {
         // Token expired — clear storage and redirect (handled by AuthContext)
-        await SecureStore.deleteItemAsync(TOKEN_KEY);
+        await storage.deleteItem(TOKEN_KEY);
       }
     } else if (error.request) {
       // Network error — no response received

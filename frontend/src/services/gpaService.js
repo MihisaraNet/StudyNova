@@ -2,7 +2,7 @@ import api from './api';
 
 export const getGPA = async () => {
   try {
-    const response = await api.get('/gpa');
+    const response = await api.get('/api/gpa');
     return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
