@@ -1,2 +1,8 @@
 package com.studentplanner.dto.request;
-// AIPromptRequest DTO
+
+import lombok.Data;
+
+@Data
+public class AIPromptRequest {
+    private String customPrompt;
+}
