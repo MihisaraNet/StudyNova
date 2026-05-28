@@ -17,7 +17,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { COLORS } from '../../constants/colors';
-import { SEMESTERS } from '../../constants/config';
+
 import useAuthStore from '../../store/authStore';
 
 const schema = yup.object({
@@ -87,44 +87,7 @@ const inputSt = StyleSheet.create({
   error: { fontSize: 11, color: '#FF5C6A', marginTop: 4 },
 });
 
-// ─── Semester Selector ────────────────────────────────────────────────────────
-function SemesterSelector({ selected, onSelect }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <View style={semSt.wrap}>
-      <Text style={inputSt.label}>CURRENT SEMESTER</Text>
-      <TouchableOpacity
-        style={[semSt.btn]}
-        onPress={() => setOpen(!open)}
-        activeOpacity={0.8}
-      >
-        <Ionicons name="school-outline" size={16} color="rgba(255,255,255,0.3)" style={{ marginRight: 10 }} />
-        <Text style={semSt.val}>{selected || 'Select semester'}</Text>
-        <Ionicons
-          name={open ? 'chevron-up' : 'chevron-down'}
-          size={15}
-          color="rgba(255,255,255,0.35)"
-        />
-      </TouchableOpacity>
-      {open && (
-        <View style={semSt.dropdown}>
-          <ScrollView nestedScrollEnabled style={{ maxHeight: 180 }}>
-            {SEMESTERS.map((s) => (
-              <TouchableOpacity
-                key={s}
-                style={[semSt.option, selected === s && semSt.optionActive]}
-                onPress={() => { onSelect(s); setOpen(false); }}
-              >
-                <Text style={[semSt.optionText, selected === s && semSt.optionTextActive]}>{s}</Text>
-                {selected === s && <Ionicons name="checkmark" size={14} color="#6C63FF" />}
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      )}
-    </View>
-  );
-}
+
 
 const semSt = StyleSheet.create({
   wrap: { marginBottom: 12 },
@@ -165,18 +128,39 @@ const semSt = StyleSheet.create({
 export default function RegisterScreen({ navigation }) {
   const { register: registerUser } = useAuthStore();
   const [loading,  setLoading]  = useState(false);
-  const [semester, setSemester] = useState('Y1S1');
-
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
     defaultValues: { name: '', email: '', password: '', confirm: '' },
   });
 
   const onSubmit = async (data) => {
-    setLoading(true);
-    const result = await registerUser({ name: data.name.trim(), email: data.email.trim(), password: data.password, semester });
-    setLoading(false);
-    if (!result.success) Alert.alert('Registration Failed', result.message);
+    try {
+      setLoading(true);
+      const result = await registerUser({
+        name: data.name.trim(),
+        email: data.email.trim(),
+        password: data.password,
+      });
+      setLoading(false);
+      if (!result.success) {
+        Alert.alert('Registration Failed', result.message || 'Unknown error occurred.');
+      }
+    } catch (error) {
+      setLoading(false);
+      Alert.alert(
+        'Registration Error',
+        error.message || 'A network error occurred. Please try again.'
+      );
+    }
+  };
+
+  const onInvalid = (validationErrors) => {
+    console.warn('Form validation failed:', validationErrors);
+    const errorKeys = Object.keys(validationErrors);
+    if (errorKeys.length > 0) {
+      const firstError = validationErrors[errorKeys[0]];
+      Alert.alert('Validation Error', firstError.message || 'Please correct the highlighted fields.');
+    }
   };
 
   return (
@@ -230,7 +214,7 @@ export default function RegisterScreen({ navigation }) {
               render={({ field: { onChange, value } }) => (
                 <DarkInput
                   label="FULL NAME"
-                  placeholder="e.g. Mihisara Perera"
+                  placeholder="e.g. Name with Initials"
                   value={value}
                   onChangeText={onChange}
                   icon="person-outline"
@@ -246,7 +230,7 @@ export default function RegisterScreen({ navigation }) {
               render={({ field: { onChange, value } }) => (
                 <DarkInput
                   label="EMAIL ADDRESS"
-                  placeholder="student@university.com"
+                  placeholder="user@studynova.com"
                   value={value}
                   onChangeText={onChange}
                   keyboardType="email-address"
@@ -255,8 +239,6 @@ export default function RegisterScreen({ navigation }) {
                 />
               )}
             />
-
-            <SemesterSelector selected={semester} onSelect={setSemester} />
 
             <Controller
               control={control}
@@ -292,7 +274,7 @@ export default function RegisterScreen({ navigation }) {
 
             {/* Sign Up button */}
             <TouchableOpacity
-              onPress={handleSubmit(onSubmit)}
+              onPress={handleSubmit(onSubmit, onInvalid)}
               disabled={loading}
               style={styles.btnWrap}
               activeOpacity={0.85}
