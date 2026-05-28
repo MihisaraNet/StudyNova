@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity, ActivityIndicator, Alert, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, SectionList, TouchableOpacity, ActivityIndicator, Alert, SafeAreaView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -7,12 +7,16 @@ import useSubjectStore from '../../store/subjectStore';
 import SubjectCard from '../../components/cards/SubjectCard';
 import EmptyState from '../../components/common/EmptyState';
 import { COLORS } from '../../constants/colors';
+import AlertPopup from '../../components/common/AlertPopup';
 
 export default function SubjectListScreen() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const { subjects, isLoading, fetchSubjects, removeSubject } = useSubjectStore();
   const [refreshing, setRefreshing] = useState(false);
+
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [subjectToDelete, setSubjectToDelete] = useState(null);
 
   useEffect(() => {
     if (isFocused) {
@@ -31,10 +35,8 @@ export default function SubjectListScreen() {
   };
 
   const handleDelete = (id) => {
-    Alert.alert('Delete Subject', 'Are you sure you want to delete this subject?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => removeSubject(id) },
-    ]);
+    setSubjectToDelete(id);
+    setShowDeleteAlert(true);
   };
 
   const renderHeader = () => (
@@ -106,6 +108,25 @@ export default function SubjectListScreen() {
       >
         <Ionicons name="add" size={24} color="#FFF" />
       </TouchableOpacity>
+
+      {/* Custom Destructive Alert Popup */}
+      <AlertPopup
+        visible={showDeleteAlert}
+        title="Delete Subject"
+        message="Are you sure you want to permanently delete this subject? This will remove all timetable classes associated with it."
+        type="danger"
+        confirmLabel="Delete"
+        onConfirm={() => {
+          setShowDeleteAlert(false);
+          if (subjectToDelete) {
+            removeSubject(subjectToDelete);
+          }
+        }}
+        onCancel={() => {
+          setShowDeleteAlert(false);
+          setSubjectToDelete(null);
+        }}
+      />
     </SafeAreaView>
   );
 }
