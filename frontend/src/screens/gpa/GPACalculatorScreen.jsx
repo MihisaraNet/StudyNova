@@ -94,9 +94,9 @@ export default function GPACalculatorScreen() {
               borderRadius={20}
             />
             <Text style={styles.overallTitle}>Overall GPA</Text>
-            <Text style={styles.overallValue}>{overallGPA.toFixed(2)}</Text>
+            <Text style={styles.overallValue}>{(overallGPA || 0).toFixed(2)}</Text>
             <Text style={styles.overallCredits}>
-              Total Credits: {totalCredits}
+              Total Credits: {totalCredits || 0}
             </Text>
           </View>
 
@@ -117,7 +117,7 @@ export default function GPACalculatorScreen() {
                   </View>
                   <View style={styles.semesterGPAContainer}>
                     <Text style={styles.semesterGPAValue}>
-                      {semesterGPAs[sem].toFixed(2)}
+                      {(semesterGPAs[sem] || 0).toFixed(2)}
                     </Text>
                   </View>
                 </View>
