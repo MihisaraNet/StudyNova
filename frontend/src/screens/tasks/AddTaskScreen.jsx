@@ -15,16 +15,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import useSubjectStore from '../../store/subjectStore';
-import useAssignmentStore from '../../store/assignmentStore';
+import useTaskStore from '../../store/taskStore';
 import { COLORS } from '../../constants/colors';
 
-export default function AddAssignmentScreen() {
+export default function AddTaskScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const editingAssignment = route.params?.assignment;
+  const editingTask = route.params?.task;
 
   const { subjects, fetchSubjects } = useSubjectStore();
-  const { addAssignment, editAssignment, isLoading, error, clearError } = useAssignmentStore();
+  const { addTask, editTask, isLoading, error, clearError } = useTaskStore();
 
   // ─── Form State ─────────────────────────────────────────────────────────────
   const [title, setTitle] = useState('');
@@ -48,15 +48,15 @@ export default function AddAssignmentScreen() {
     const dd = String(tomorrow.getDate()).padStart(2, '0');
     setDueDate(`${yyyy}-${mm}-${dd}`);
 
-    if (editingAssignment) {
-      setTitle(editingAssignment.title || '');
-      setDescription(editingAssignment.description || '');
-      setSelectedSubjectId(editingAssignment.subjectId || '');
+    if (editingTask) {
+      setTitle(editingTask.title || '');
+      setDescription(editingTask.description || '');
+      setSelectedSubjectId(editingTask.subjectId || '');
       
       // Parse ISO LocalDateTime from backend (e.g. 2026-05-28T15:00:00)
-      if (editingAssignment.dueDate) {
+      if (editingTask.dueDate) {
         try {
-          const parts = editingAssignment.dueDate.split('T');
+          const parts = editingTask.dueDate.split('T');
           setDueDate(parts[0]);
           if (parts[1]) {
             setDueTime(parts[1].substring(0, 5));
@@ -66,11 +66,11 @@ export default function AddAssignmentScreen() {
         }
       }
       
-      setPriority(editingAssignment.priority || 'MEDIUM');
-      setEstimatedHours(String(editingAssignment.estimatedHours || '2.0'));
-      setReminderMinutesBefore(String(editingAssignment.reminderMinutesBefore || '60'));
+      setPriority(editingTask.priority || 'MEDIUM');
+      setEstimatedHours(String(editingTask.estimatedHours || '2.0'));
+      setReminderMinutesBefore(String(editingTask.reminderMinutesBefore || '60'));
     }
-  }, [editingAssignment]);
+  }, [editingTask]);
 
   const handleQuickDate = (type) => {
     const d = new Date();
@@ -87,7 +87,7 @@ export default function AddAssignmentScreen() {
 
   const handleSave = async () => {
     if (!title.trim()) {
-      Alert.alert('Required Field', 'Please enter an assignment title.');
+      Alert.alert('Required Field', 'Please enter a task title.');
       return;
     }
 
@@ -121,14 +121,14 @@ export default function AddAssignmentScreen() {
       priority: priority.toUpperCase(),
       estimatedHours: parseFloat(estimatedHours) || 2.0,
       reminderMinutesBefore: parseInt(reminderMinutesBefore, 10) || 60,
-      status: editingAssignment?.status || 'PENDING'
+      status: editingTask?.status || 'PENDING'
     };
 
     let result;
-    if (editingAssignment) {
-      result = await editAssignment(editingAssignment.id, payload);
+    if (editingTask) {
+      result = await editTask(editingTask.id, payload);
     } else {
-      result = await addAssignment(payload);
+      result = await addTask(payload);
     }
 
     if (result.success) {
@@ -153,7 +153,7 @@ export default function AddAssignmentScreen() {
           <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>
-          {editingAssignment ? 'Edit Assignment' : 'New Assignment'}
+          {editingTask ? 'Edit Task' : 'New Task'}
         </Text>
         <View style={{ width: 40 }} />
       </View>
@@ -201,21 +201,21 @@ export default function AddAssignmentScreen() {
             })}
           </ScrollView>
 
-          {/* ASSIGNMENT TITLE */}
-          <Text style={styles.label}>Assignment Title *</Text>
+          {/* TASK TITLE */}
+          <Text style={styles.label}>Task Title *</Text>
           <TextInput
             style={styles.input}
-            placeholder="e.g. Lab Report 2, Term Paper Draft..."
+            placeholder="e.g. Write Summary Chapter 3, Quiz prep..."
             placeholderTextColor={COLORS.textLight}
             value={title}
             onChangeText={setTitle}
           />
 
-          {/* ASSIGNMENT DESCRIPTION */}
+          {/* TASK DESCRIPTION */}
           <Text style={styles.label}>Description & Notes</Text>
           <TextInput
             style={[styles.input, styles.textArea]}
-            placeholder="e.g. Topics to cover, research link, file details..."
+            placeholder="e.g. Formulas to remember, key points..."
             placeholderTextColor={COLORS.textLight}
             value={description}
             onChangeText={setDescription}
@@ -342,7 +342,7 @@ export default function AddAssignmentScreen() {
                 <>
                   <Ionicons name="checkmark-circle-outline" size={20} color={COLORS.white} />
                   <Text style={styles.saveBtnText}>
-                    {editingAssignment ? 'Save Assignment Changes' : 'Confirm Assignment'}
+                    {editingTask ? 'Save Task Changes' : 'Confirm Task'}
                   </Text>
                 </>
               )}

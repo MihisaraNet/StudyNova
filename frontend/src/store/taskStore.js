@@ -1,32 +1,32 @@
 import { create } from 'zustand';
-import * as assignmentService from '../services/assignmentService';
+import * as taskService from '../services/taskService';
 
-const useAssignmentStore = create((set, get) => ({
-  assignments: [],
+const useTaskStore = create((set, get) => ({
+  tasks: [],
   isLoading: false,
   error: null,
 
-  fetchAssignments: async (subjectId) => {
+  fetchTasks: async (subjectId) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await assignmentService.getAssignments(subjectId);
+      const response = await taskService.getTasks(subjectId);
       if (response.success) {
-        set({ assignments: response.data, isLoading: false });
+        set({ tasks: response.data, isLoading: false });
       } else {
         set({ error: response.message, isLoading: false });
       }
     } catch (error) {
-      set({ error: 'Failed to fetch assignments', isLoading: false });
+      set({ error: 'Failed to fetch tasks', isLoading: false });
     }
   },
 
-  addAssignment: async (data) => {
+  addTask: async (data) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await assignmentService.createAssignment(data);
+      const response = await taskService.createTask(data);
       if (response.success) {
         set((state) => ({
-          assignments: [...state.assignments, response.data],
+          tasks: [...state.tasks, response.data],
           isLoading: false,
         }));
         return { success: true };
@@ -35,18 +35,18 @@ const useAssignmentStore = create((set, get) => ({
         return { success: false, message: response.message };
       }
     } catch (error) {
-      set({ error: 'Failed to add assignment', isLoading: false });
-      return { success: false, message: 'Failed to add assignment' };
+      set({ error: 'Failed to add task', isLoading: false });
+      return { success: false, message: 'Failed to add task' };
     }
   },
 
-  editAssignment: async (id, data) => {
+  editTask: async (id, data) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await assignmentService.updateAssignment(id, data);
+      const response = await taskService.updateTask(id, data);
       if (response.success) {
         set((state) => ({
-          assignments: state.assignments.map((asg) => (asg.id === id ? response.data : asg)),
+          tasks: state.tasks.map((t) => (t.id === id ? response.data : t)),
           isLoading: false,
         }));
         return { success: true };
@@ -55,18 +55,18 @@ const useAssignmentStore = create((set, get) => ({
         return { success: false, message: response.message };
       }
     } catch (error) {
-      set({ error: 'Failed to edit assignment', isLoading: false });
-      return { success: false, message: 'Failed to edit assignment' };
+      set({ error: 'Failed to edit task', isLoading: false });
+      return { success: false, message: 'Failed to edit task' };
     }
   },
 
-  removeAssignment: async (id) => {
+  removeTask: async (id) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await assignmentService.deleteAssignment(id);
+      const response = await taskService.deleteTask(id);
       if (response.success) {
         set((state) => ({
-          assignments: state.assignments.filter((asg) => asg.id !== id),
+          tasks: state.tasks.filter((t) => t.id !== id),
           isLoading: false,
         }));
         return { success: true };
@@ -75,12 +75,12 @@ const useAssignmentStore = create((set, get) => ({
         return { success: false, message: response.message };
       }
     } catch (error) {
-      set({ error: 'Failed to delete assignment', isLoading: false });
-      return { success: false, message: 'Failed to delete assignment' };
+      set({ error: 'Failed to delete task', isLoading: false });
+      return { success: false, message: 'Failed to delete task' };
     }
   },
 
   clearError: () => set({ error: null }),
 }));
 
-export default useAssignmentStore;
+export default useTaskStore;

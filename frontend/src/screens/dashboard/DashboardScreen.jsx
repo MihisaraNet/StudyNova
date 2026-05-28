@@ -11,38 +11,34 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import useAuthStore from '../../store/authStore';
-import useGpaStore from '../../store/gpaStore';
 import useSubjectStore from '../../store/subjectStore';
-import useAssignmentStore from '../../store/assignmentStore';
+import useTaskStore from '../../store/taskStore';
 import useTimetableStore from '../../store/timetableStore';
 
 export default function DashboardScreen({ navigation }) {
   const { user } = useAuthStore();
-  const { gpaData, fetchGPA } = useGpaStore();
   const { subjects, fetchSubjects } = useSubjectStore();
-  const { assignments, fetchAssignments } = useAssignmentStore();
+  const { tasks, fetchTasks } = useTaskStore();
   const { sessions, fetchSessions } = useTimetableStore();
 
   React.useEffect(() => {
-    fetchGPA();
     fetchSubjects();
-    fetchAssignments();
+    fetchTasks();
     fetchSessions();
-  }, [fetchGPA, fetchSubjects, fetchAssignments, fetchSessions]);
+  }, [fetchSubjects, fetchTasks, fetchSessions]);
 
-  const pendingAssignmentsCount = assignments.filter(a => a.status !== 'COMPLETED').length;
+  const pendingTasksCount = tasks.filter(t => t.status !== 'COMPLETED').length;
 
   const quickStats = [
-    { icon: 'book-outline',          label: 'Subjects',    value: subjects.length.toString(), color: COLORS.primary, onPress: () => navigation.navigate('Subjects') },
-    { icon: 'checkmark-circle-outline', label: 'Assignments', value: pendingAssignmentsCount.toString(), color: COLORS.warning, onPress: () => navigation.navigate('Assignments') },
-    { icon: 'calendar-outline',      label: 'Sessions',    value: sessions.length.toString(), color: COLORS.success, onPress: () => navigation.navigate('Timetable') },
-    { icon: 'school-outline',        label: 'GPA',         value: gpaData?.overallGPA?.toFixed(2) || '—', color: COLORS.secondary, onPress: () => navigation.navigate('GPA') },
+    { icon: 'book-outline',          label: 'Subjects', value: subjects.length.toString(), color: COLORS.primary, onPress: () => navigation.navigate('Subjects') },
+    { icon: 'checkmark-circle-outline', label: 'Active Tasks', value: pendingTasksCount.toString(), color: COLORS.warning, onPress: () => navigation.navigate('Tasks') },
+    { icon: 'calendar-outline',      label: 'Sessions', value: sessions.length.toString(), color: COLORS.success, onPress: () => navigation.navigate('Timetable') },
   ];
 
   const quickActions = [
-    { icon: 'add-circle',   label: 'Add Subject',    color: COLORS.primary, onPress: () => navigation.navigate('Subjects', { screen: 'AddSubject' }) },
-    { icon: 'clipboard',    label: 'New Assignment', color: COLORS.warning, onPress: () => navigation.navigate('Assignments', { screen: 'AddAssignment' }) },
-    { icon: 'time',         label: 'Study Session',  color: COLORS.success, onPress: () => navigation.navigate('Timetable', { screen: 'AddSession' }) },
+    { icon: 'add-circle',   label: 'Add Subject', color: COLORS.primary, onPress: () => navigation.navigate('Subjects', { screen: 'AddSubject' }) },
+    { icon: 'clipboard',    label: 'New Task',    color: COLORS.warning, onPress: () => navigation.navigate('Tasks', { screen: 'AddTask' }) },
+    { icon: 'time',         label: 'Study Session', color: COLORS.success, onPress: () => navigation.navigate('Timetable', { screen: 'AddSession' }) },
     { icon: 'bulb',         label: 'AI Suggestions', color: COLORS.secondary, onPress: () => navigation.navigate('AIStudySuggestion') },
   ];
 
@@ -69,10 +65,8 @@ export default function DashboardScreen({ navigation }) {
             <Text style={styles.greeting}>
               Good {getGreeting()}, 👋
             </Text>
-            <Text style={styles.userName}>{user?.name ?? 'Student'}!</Text>
-            {user?.semester && (
-              <Text style={styles.semester}>{user.semester} · Student</Text>
-            )}
+            <Text style={styles.userName}>{user?.name ?? 'User'}!</Text>
+            <Text style={styles.semester}>StudyNova Workspace</Text>
           </View>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
@@ -102,7 +96,7 @@ export default function DashboardScreen({ navigation }) {
           <Text style={styles.welcomeEmoji}>🚀</Text>
           <Text style={styles.welcomeTitle}>You're all set up!</Text>
           <Text style={styles.welcomeText}>
-            Start by adding your subjects, then track your assignments and build your study timetable.
+            Start by adding your subjects, then log your active tasks and schedule study sessions in your timetable.
           </Text>
         </View>
 
@@ -125,7 +119,6 @@ export default function DashboardScreen({ navigation }) {
 }
 
 function getGreeting() {
-
   const h = new Date().getHours();
   if (h < 12) return 'Morning';
   if (h < 17) return 'Afternoon';
@@ -162,7 +155,7 @@ const styles = StyleSheet.create({
   statsGrid:    { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 20 },
   statCard: {
     flex: 1,
-    minWidth: '44%',
+    minWidth: '28%',
     backgroundColor: COLORS.surface,
     borderRadius: 16,
     padding: 16,
@@ -172,7 +165,7 @@ const styles = StyleSheet.create({
   },
   statIcon:   { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
   statValue:  { fontSize: 22, fontWeight: '800', color: COLORS.textPrimary },
-  statLabel:  { fontSize: 12, color: COLORS.textSecondary, fontWeight: '500', marginTop: 2 },
+  statLabel:  { fontSize: 11, color: COLORS.textSecondary, fontWeight: '600', marginTop: 2, textAlign: 'center' },
   welcomeCard: {
     backgroundColor: COLORS.surfaceAlt,
     borderRadius: 16,

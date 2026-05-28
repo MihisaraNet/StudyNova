@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 
-export default function AssignmentCard({ assignment, onToggleComplete, onPress }) {
-  const isCompleted = assignment.status === 'COMPLETED';
+export default function TaskCard({ task, onToggleComplete, onPress }) {
+  const isCompleted = task.status === 'COMPLETED';
 
   // Format Due Date elegantly
   const getDueLabel = (dateStr) => {
@@ -48,7 +48,7 @@ export default function AssignmentCard({ assignment, onToggleComplete, onPress }
     }
   };
 
-  const priorityColor = getPriorityColor(assignment.priority);
+  const priorityColor = getPriorityColor(task.priority);
 
   return (
     <TouchableOpacity
@@ -76,23 +76,23 @@ export default function AssignmentCard({ assignment, onToggleComplete, onPress }
             style={[styles.title, isCompleted && styles.completedText]}
             numberOfLines={1}
           >
-            {assignment.title}
+            {task.title}
           </Text>
 
           {/* Badges Area */}
           <View style={styles.badgeRow}>
-            {assignment.subjectName ? (
+            {task.subjectName ? (
               <View style={styles.subjectBadge}>
                 <Text style={styles.subjectText} numberOfLines={1}>
-                  📚 {assignment.subjectName}
+                  📚 {task.subjectName}
                 </Text>
               </View>
             ) : null}
 
-            {assignment.estimatedHours ? (
+            {task.estimatedHours ? (
               <View style={styles.hoursBadge}>
                 <Text style={styles.hoursText}>
-                  ⏱️ {assignment.estimatedHours}h
+                  ⏱️ {task.estimatedHours}h
                 </Text>
               </View>
             ) : null}
@@ -104,16 +104,16 @@ export default function AssignmentCard({ assignment, onToggleComplete, onPress }
           <Ionicons
             name="calendar-outline"
             size={12}
-            color={isCompleted ? COLORS.textLight : (assignment.status === 'OVERDUE' || (new Date(assignment.dueDate) < new Date() && !isCompleted)) ? COLORS.error : COLORS.textSecondary}
+            color={isCompleted ? COLORS.textLight : (task.status === 'OVERDUE' || (new Date(task.dueDate) < new Date() && !isCompleted)) ? COLORS.error : COLORS.textSecondary}
           />
           <Text
             style={[
               styles.dueText,
-              (assignment.status === 'OVERDUE' || (new Date(assignment.dueDate) < new Date() && !isCompleted)) && styles.overdueText,
+              (task.status === 'OVERDUE' || (new Date(task.dueDate) < new Date() && !isCompleted)) && styles.overdueText,
               isCompleted && styles.completedText
             ]}
           >
-            {getDueLabel(assignment.dueDate)}
+            {getDueLabel(task.dueDate)}
           </Text>
         </View>
       </View>

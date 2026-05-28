@@ -184,7 +184,7 @@ export default function LoginScreen({ navigation }) {
               render={({ field: { onChange, value } }) => (
                 <AuthInput
                   label="EMAIL ADDRESS"
-                  placeholder="student@university.com"
+                  placeholder="user@studynova.com"
                   value={value}
                   onChangeText={onChange}
                   keyboardType="email-address"
