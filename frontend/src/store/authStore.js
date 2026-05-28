@@ -71,10 +71,21 @@ const useAuthStore = create((set, get) => ({
 
   // ─── Logout ─────────────────────────────────────────────────────────────────
   logout: async () => {
-    try { await authService.logout(); } catch {}  // fire-and-forget
-    await storage.deleteItem(TOKEN_KEY);
-    await storage.deleteItem(USER_KEY);
-    set({ user: null, token: null, isLoggedIn: false, error: null });
+    // 1. Clear local session first so UI signs out immediately
+    try {
+      await storage.deleteItem(TOKEN_KEY);
+      await storage.deleteItem(USER_KEY);
+      set({ user: null, token: null, isLoggedIn: false, error: null });
+    } catch (e) {
+      // Ignore storage clear exceptions
+    }
+
+    // 2. Fire-and-forget background server logout API call
+    try { 
+      await authService.logout(); 
+    } catch (err) {
+      // Ignore backend exceptions since client is already signed out
+    }
   },
 
   // ─── Update profile locally ─────────────────────────────────────────────────
