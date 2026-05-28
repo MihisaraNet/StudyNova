@@ -15,20 +15,17 @@ export default function AddSubjectScreen() {
   const [formData, setFormData] = useState({
     name: '',
     code: '',
-    credits: '3',
-    semester: '',
-    grade: '',
   });
 
   const handleSave = async () => {
-    if (!formData.name || !formData.code || !formData.credits || !formData.semester) {
+    if (!formData.name || !formData.code) {
       Alert.alert('Error', 'Please fill in all required fields.');
       return;
     }
     
     const payload = {
-      ...formData,
-      credits: parseInt(formData.credits, 10) || 3,
+      name: formData.name.trim(),
+      code: formData.code.trim().toUpperCase(),
     };
     
     const result = await addSubject(payload);
@@ -77,31 +74,7 @@ export default function AddSubjectScreen() {
               autoCapitalize="characters"
             />
             
-            <InputField
-              label="Credits *"
-              placeholder="e.g. 3"
-              value={formData.credits}
-              onChangeText={(text) => setFormData({ ...formData, credits: text })}
-              icon="star-outline"
-              keyboardType="numeric"
-            />
-            
-            <InputField
-              label="Semester *"
-              placeholder="e.g. Spring 2026"
-              value={formData.semester}
-              onChangeText={(text) => setFormData({ ...formData, semester: text })}
-              icon="calendar-outline"
-            />
-            
-            <InputField
-              label="Target/Achieved Grade (Optional)"
-              placeholder="e.g. A"
-              value={formData.grade}
-              onChangeText={(text) => setFormData({ ...formData, grade: text })}
-              icon="ribbon-outline"
-              autoCapitalize="characters"
-            />
+
             
             <Button
               title="Save Subject"

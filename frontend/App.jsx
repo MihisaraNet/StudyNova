@@ -6,13 +6,11 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AppNavigator from './src/navigation/AppNavigator';
 import useAuthStore from './src/store/authStore';
 import useSubjectStore from './src/store/subjectStore';
-import useGpaStore from './src/store/gpaStore';
 import useTimetableStore from './src/store/timetableStore';
 
 if (typeof window !== 'undefined') {
   window.useAuthStore = useAuthStore;
   window.useSubjectStore = useSubjectStore;
-  window.useGpaStore = useGpaStore;
   window.useTimetableStore = useTimetableStore;
 }
 

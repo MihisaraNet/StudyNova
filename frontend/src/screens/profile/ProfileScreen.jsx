@@ -49,19 +49,11 @@ export default function ProfileScreen() {
         </View>
         <Text style={styles.name}>{user?.name ?? 'Student'}</Text>
         <Text style={styles.email}>{user?.email ?? ''}</Text>
-        {user?.semester && (
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{user.semester}</Text>
-          </View>
-        )}
+
       </LinearGradient>
 
       <View style={styles.body}>
-        {/* GPA Target */}
-        <View style={styles.gpaCard}>
-          <Text style={styles.gpaLabel}>GPA Target</Text>
-          <Text style={styles.gpaValue}>{user?.gpaTarget?.toFixed(1) ?? '3.5'} / 4.0</Text>
-        </View>
+
 
         {/* Menu */}
         <View style={styles.menu}>
