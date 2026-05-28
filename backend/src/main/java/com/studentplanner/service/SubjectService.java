@@ -21,9 +21,6 @@ public class SubjectService {
                 .userId(userId)
                 .name(request.getName())
                 .code(request.getCode())
-                .credits(request.getCredits())
-                .semester(request.getSemester())
-                .grade(request.getGrade())
                 .build();
         return subjectRepository.save(subject);
     }
@@ -32,9 +29,6 @@ public class SubjectService {
         return subjectRepository.findByUserId(userId);
     }
 
-    public List<Subject> getSubjectsByUserAndSemester(String userId, String semester) {
-        return subjectRepository.findByUserIdAndSemester(userId, semester);
-    }
 
     public Subject getSubjectByIdAndUser(String id, String userId) {
         return subjectRepository.findByIdAndUserId(id, userId)
@@ -46,9 +40,6 @@ public class SubjectService {
 
         subject.setName(request.getName());
         subject.setCode(request.getCode());
-        subject.setCredits(request.getCredits());
-        subject.setSemester(request.getSemester());
-        subject.setGrade(request.getGrade());
         subject.setUpdatedAt(LocalDateTime.now());
 
         return subjectRepository.save(subject);

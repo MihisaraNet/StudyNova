@@ -17,9 +17,8 @@ public class AuthResponse {
     private String name;
     private String email;
     private String role;
-    private String semester;
 
-    public static AuthResponse of(String token, String id, String name, String email, String role, String semester) {
+    public static AuthResponse of(String token, String id, String name, String email, String role) {
         return AuthResponse.builder()
                 .token(token)
                 .type("Bearer")
@@ -27,7 +26,6 @@ public class AuthResponse {
                 .name(name)
                 .email(email)
                 .role(role)
-                .semester(semester)
                 .build();
     }
 }

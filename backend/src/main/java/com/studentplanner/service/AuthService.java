@@ -37,8 +37,6 @@ public class AuthService {
                 .name(request.getName())
                 .email(request.getEmail().toLowerCase().trim())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .semester(request.getSemester())
-                .gpaTarget(request.getGpaTarget() != null ? request.getGpaTarget() : 3.5)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -52,8 +50,7 @@ public class AuthService {
                 savedUser.getId(),
                 savedUser.getName(),
                 savedUser.getEmail(),
-                savedUser.getRole(),
-                savedUser.getSemester()
+                savedUser.getRole()
         );
     }
 
@@ -79,8 +76,7 @@ public class AuthService {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getRole(),
-                user.getSemester()
+                user.getRole()
         );
     }
 
@@ -93,11 +89,9 @@ public class AuthService {
 
     // ─── Update profile ───────────────────────────────────────────────────────
 
-    public User updateProfile(String email, String name, String semester, Double gpaTarget) {
+    public User updateProfile(String email, String name) {
         User user = getUserByEmail(email);
         if (name != null) user.setName(name);
-        if (semester != null) user.setSemester(semester);
-        if (gpaTarget != null) user.setGpaTarget(gpaTarget);
         user.setUpdatedAt(java.time.LocalDateTime.now());
         return userRepository.save(user);
     }

@@ -25,12 +25,6 @@ public class Subject {
 
     private String name;
     private String code;
-    
-    @Builder.Default
-    private Integer credits = 3;
-    
-    private String semester;
-    private String grade; // e.g., "A", "B+", optional
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
