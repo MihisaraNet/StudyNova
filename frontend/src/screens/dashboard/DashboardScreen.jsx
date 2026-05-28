@@ -12,20 +12,38 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import useAuthStore from '../../store/authStore';
 import useGpaStore from '../../store/gpaStore';
+import useSubjectStore from '../../store/subjectStore';
+import useAssignmentStore from '../../store/assignmentStore';
+import useTimetableStore from '../../store/timetableStore';
 
 export default function DashboardScreen({ navigation }) {
   const { user } = useAuthStore();
   const { gpaData, fetchGPA } = useGpaStore();
+  const { subjects, fetchSubjects } = useSubjectStore();
+  const { assignments, fetchAssignments } = useAssignmentStore();
+  const { sessions, fetchSessions } = useTimetableStore();
 
   React.useEffect(() => {
     fetchGPA();
-  }, [fetchGPA]);
+    fetchSubjects();
+    fetchAssignments();
+    fetchSessions();
+  }, [fetchGPA, fetchSubjects, fetchAssignments, fetchSessions]);
+
+  const pendingAssignmentsCount = assignments.filter(a => a.status !== 'COMPLETED').length;
 
   const quickStats = [
-    { icon: 'book-outline',          label: 'Subjects',    value: '0', color: COLORS.primary },
-    { icon: 'checkmark-circle-outline', label: 'Assignments', value: '0', color: COLORS.warning },
-    { icon: 'calendar-outline',      label: 'Sessions',    value: '0', color: COLORS.success },
+    { icon: 'book-outline',          label: 'Subjects',    value: subjects.length.toString(), color: COLORS.primary, onPress: () => navigation.navigate('Subjects') },
+    { icon: 'checkmark-circle-outline', label: 'Assignments', value: pendingAssignmentsCount.toString(), color: COLORS.warning, onPress: () => navigation.navigate('Assignments') },
+    { icon: 'calendar-outline',      label: 'Sessions',    value: sessions.length.toString(), color: COLORS.success, onPress: () => navigation.navigate('Timetable') },
     { icon: 'school-outline',        label: 'GPA',         value: gpaData?.overallGPA?.toFixed(2) || '—', color: COLORS.secondary, onPress: () => navigation.navigate('GPA') },
+  ];
+
+  const quickActions = [
+    { icon: 'add-circle',   label: 'Add Subject',    color: COLORS.primary, onPress: () => navigation.navigate('Subjects', { screen: 'AddSubject' }) },
+    { icon: 'clipboard',    label: 'New Assignment', color: COLORS.warning, onPress: () => navigation.navigate('Assignments', { screen: 'AddAssignment' }) },
+    { icon: 'time',         label: 'Study Session',  color: COLORS.success, onPress: () => navigation.navigate('Timetable', { screen: 'AddSession' }) },
+    { icon: 'bulb',         label: 'AI Suggestions', color: COLORS.secondary, onPress: () => navigation.navigate('AIStudySuggestion') },
   ];
 
   return (
@@ -91,13 +109,8 @@ export default function DashboardScreen({ navigation }) {
         {/* Quick Actions */}
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.actionsGrid}>
-          {[
-            { icon: 'add-circle',   label: 'Add Subject',    color: COLORS.primary },
-            { icon: 'clipboard',    label: 'New Assignment', color: COLORS.warning },
-            { icon: 'time',         label: 'Study Session',  color: COLORS.success },
-            { icon: 'bulb',         label: 'AI Suggestions', color: COLORS.secondary },
-          ].map((action, i) => (
-            <TouchableOpacity key={i} style={styles.actionBtn} activeOpacity={0.8}>
+          {quickActions.map((action, i) => (
+            <TouchableOpacity key={i} style={styles.actionBtn} onPress={action.onPress} activeOpacity={0.8}>
               <View style={[styles.actionIcon, { backgroundColor: action.color + '18' }]}>
                 <Ionicons name={action.icon} size={24} color={action.color} />
               </View>
@@ -112,6 +125,7 @@ export default function DashboardScreen({ navigation }) {
 }
 
 function getGreeting() {
+
   const h = new Date().getHours();
   if (h < 12) return 'Morning';
   if (h < 17) return 'Afternoon';
