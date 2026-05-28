@@ -1,1 +1,0 @@
-﻿// GPA trend chart

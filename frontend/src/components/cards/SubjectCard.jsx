@@ -21,22 +21,7 @@ export default function SubjectCard({ subject, onEdit, onDelete }) {
         </View>
       </View>
       
-      <View style={styles.details}>
-        <View style={styles.detailItem}>
-          <Ionicons name="book-outline" size={16} color={COLORS.textSecondary} />
-          <Text style={styles.detailText}>{subject.credits} Credits</Text>
-        </View>
-        <View style={styles.detailItem}>
-          <Ionicons name="calendar-outline" size={16} color={COLORS.textSecondary} />
-          <Text style={styles.detailText}>{subject.semester}</Text>
-        </View>
-        {subject.grade && (
-          <View style={styles.detailItem}>
-            <Ionicons name="ribbon-outline" size={16} color={COLORS.textSecondary} />
-            <Text style={styles.detailText}>Grade: {subject.grade}</Text>
-          </View>
-        )}
-      </View>
+
     </View>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity, ActivityIndicator, Alert, SafeAreaView, Platform } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Alert, SafeAreaView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -45,21 +45,7 @@ export default function SubjectListScreen() {
     </View>
   );
 
-  const sections = useMemo(() => {
-    const grouped = {};
-    subjects.forEach(sub => {
-      const sem = sub.semester || 'Unassigned';
-      if (!grouped[sem]) {
-        grouped[sem] = [];
-      }
-      grouped[sem].push(sub);
-    });
-    
-    return Object.keys(grouped).map(sem => ({
-      title: sem,
-      data: grouped[sem],
-    })).sort((a, b) => b.title.localeCompare(a.title)); // rough descending sort
-  }, [subjects]);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -84,21 +70,15 @@ export default function SubjectListScreen() {
           onAction={() => navigation.navigate('AddSubject')}
         />
       ) : (
-        <SectionList
-          sections={sections}
+        <FlatList
+          data={subjects}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <SubjectCard subject={item} onEdit={handleEdit} onDelete={handleDelete} />
           )}
-          renderSectionHeader={({ section: { title } }) => (
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>{title}</Text>
-            </View>
-          )}
           contentContainerStyle={styles.listContent}
           refreshing={refreshing}
           onRefresh={onRefresh}
-          stickySectionHeadersEnabled={false}
         />
       )}
 

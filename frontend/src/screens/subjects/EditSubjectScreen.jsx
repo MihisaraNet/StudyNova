@@ -17,20 +17,17 @@ export default function EditSubjectScreen() {
   const [formData, setFormData] = useState({
     name: subject.name,
     code: subject.code,
-    credits: subject.credits.toString(),
-    semester: subject.semester,
-    grade: subject.grade || '',
   });
 
   const handleSave = async () => {
-    if (!formData.name || !formData.code || !formData.credits || !formData.semester) {
+    if (!formData.name || !formData.code) {
       Alert.alert('Error', 'Please fill in all required fields.');
       return;
     }
     
     const payload = {
-      ...formData,
-      credits: parseInt(formData.credits, 10) || 3,
+      name: formData.name.trim(),
+      code: formData.code.trim().toUpperCase(),
     };
     
     const result = await editSubject(subject.id, payload);
@@ -79,31 +76,7 @@ export default function EditSubjectScreen() {
               autoCapitalize="characters"
             />
             
-            <InputField
-              label="Credits *"
-              placeholder="e.g. 3"
-              value={formData.credits}
-              onChangeText={(text) => setFormData({ ...formData, credits: text })}
-              icon="star-outline"
-              keyboardType="numeric"
-            />
-            
-            <InputField
-              label="Semester *"
-              placeholder="e.g. Spring 2026"
-              value={formData.semester}
-              onChangeText={(text) => setFormData({ ...formData, semester: text })}
-              icon="calendar-outline"
-            />
-            
-            <InputField
-              label="Target/Achieved Grade (Optional)"
-              placeholder="e.g. A"
-              value={formData.grade}
-              onChangeText={(text) => setFormData({ ...formData, grade: text })}
-              icon="ribbon-outline"
-              autoCapitalize="characters"
-            />
+
             
             <Button
               title="Update Subject"
