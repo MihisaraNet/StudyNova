@@ -11,12 +11,4 @@ public class SubjectRequest {
 
     @NotBlank(message = "Code is required")
     private String code;
-
-    @NotNull(message = "Credits are required")
-    private Integer credits;
-
-    @NotBlank(message = "Semester is required")
-    private String semester;
-    
-    private String grade;
 }

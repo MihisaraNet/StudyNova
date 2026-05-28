@@ -39,16 +39,10 @@ public class SubjectController {
     // ─── GET /api/subjects ────────────────────────────────────────────────────
     @GetMapping
     public ResponseEntity<ApiResponse<List<Subject>>> getAllSubjects(
-            @RequestParam(required = false) String semester,
             Authentication authentication) {
 
         String userId = getUserId(authentication);
-        List<Subject> subjects;
-        if (semester != null && !semester.trim().isEmpty()) {
-            subjects = subjectService.getSubjectsByUserAndSemester(userId, semester);
-        } else {
-            subjects = subjectService.getAllSubjectsByUser(userId);
-        }
+        List<Subject> subjects = subjectService.getAllSubjectsByUser(userId);
         return ResponseEntity.ok(ApiResponse.success("Subjects fetched successfully", subjects));
     }
 

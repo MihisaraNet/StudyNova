@@ -58,11 +58,8 @@ public class AuthController {
             Authentication authentication) {
 
         String name     = (String) updates.get("name");
-        String semester = (String) updates.get("semester");
-        Double gpaTarget = updates.get("gpaTarget") != null
-                ? Double.parseDouble(updates.get("gpaTarget").toString()) : null;
 
-        User updated = authService.updateProfile(authentication.getName(), name, semester, gpaTarget);
+        User updated = authService.updateProfile(authentication.getName(), name);
         updated.setPassword(null);
         return ResponseEntity.ok(ApiResponse.success("Profile updated successfully", updated));
     }

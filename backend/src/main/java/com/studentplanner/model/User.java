@@ -30,11 +30,6 @@ public class User {
     @Builder.Default
     private String role = "STUDENT";
 
-    private String semester;
-
-    @Builder.Default
-    private Double gpaTarget = 3.5;
-
     @Builder.Default
     private Boolean notificationsEnabled = true;
 
