@@ -1,25 +1,20 @@
 import React from 'react';
 import {
   View, Text, StyleSheet, ScrollView,
-  TouchableOpacity, StatusBar, Alert,
+  TouchableOpacity, StatusBar, Alert, Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import useAuthStore from '../../store/authStore';
+import AlertPopup from '../../components/common/AlertPopup';
 
 export default function ProfileScreen() {
   const { user, logout } = useAuthStore();
+  const [showLogoutAlert, setShowLogoutAlert] = React.useState(false);
 
   const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to sign out?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Sign Out', style: 'destructive', onPress: () => logout() },
-      ]
-    );
+    setShowLogoutAlert(true);
   };
 
   const menuItems = [
@@ -90,6 +85,20 @@ export default function ProfileScreen() {
         <Text style={styles.version}>StudyNova v1.0.0</Text>
       </View>
       </ScrollView>
+
+      {/* Custom Premium Alert Popup */}
+      <AlertPopup
+        visible={showLogoutAlert}
+        title="Sign Out"
+        message="Are you sure you want to log out of your StudyNova workspace?"
+        type="warning"
+        confirmLabel="Sign Out"
+        onConfirm={() => {
+          setShowLogoutAlert(false);
+          logout();
+        }}
+        onCancel={() => setShowLogoutAlert(false)}
+      />
     </View>
   );
 }
