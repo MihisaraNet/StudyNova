@@ -3,9 +3,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/colors';
 
-import DashboardScreen      from '../screens/dashboard/DashboardScreen';
+import DashboardNavigator   from './DashboardNavigator';
 import SubjectNavigator     from './SubjectNavigator';
-import AssignmentListScreen from '../screens/assignments/AssignmentListScreen';
+import AssignmentNavigator  from './AssignmentNavigator';
 import TimetableNavigator   from './TimetableNavigator';
 import ProfileScreen        from '../screens/profile/ProfileScreen';
 import GPACalculatorScreen  from '../screens/gpa/GPACalculatorScreen';
@@ -49,12 +49,13 @@ export default function MainTabNavigator() {
         },
       })}
     >
-      <Tab.Screen name="Dashboard"      component={DashboardScreen} />
+      <Tab.Screen name="Dashboard"      component={DashboardNavigator} />
       <Tab.Screen name="Subjects"       component={SubjectNavigator} />
-      <Tab.Screen name="Assignments"    component={AssignmentListScreen} />
+      <Tab.Screen name="Assignments"    component={AssignmentNavigator} />
       <Tab.Screen name="Timetable"      component={TimetableNavigator} />
       <Tab.Screen name="GPA"            component={GPACalculatorScreen} />
       <Tab.Screen name="Profile"        component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
+
