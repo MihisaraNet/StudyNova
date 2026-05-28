@@ -1,13 +1,13 @@
 package com.studentplanner.controller;
 
 import com.studentplanner.dto.response.ApiResponse;
-import com.studentplanner.model.Assignment;
+import com.studentplanner.model.Task;
 import com.studentplanner.model.StudySession;
 import com.studentplanner.model.Subject;
 import com.studentplanner.model.User;
 import com.studentplanner.repository.UserRepository;
 import com.studentplanner.service.AIService;
-import com.studentplanner.service.AssignmentService;
+import com.studentplanner.service.TaskService;
 import com.studentplanner.service.SubjectService;
 import com.studentplanner.service.TimetableService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class AIController {
 
     private final AIService aiService;
     private final SubjectService subjectService;
-    private final AssignmentService assignmentService;
+    private final TaskService taskService;
     private final TimetableService timetableService;
     private final UserRepository userRepository;
 
@@ -41,10 +41,10 @@ public class AIController {
         String userId = user.getId();
         
         List<Subject> subjects = subjectService.getAllSubjectsByUser(userId);
-        List<Assignment> assignments = assignmentService.getAllAssignmentsByUser(userId);
+        List<Task> tasks = taskService.getAllTasksByUser(userId);
         List<StudySession> sessions = timetableService.getSessionsByUserId(userId);
         
-        String suggestions = aiService.generateSuggestions(user, subjects, assignments, sessions);
+        String suggestions = aiService.generateSuggestions(user, subjects, tasks, sessions);
         
         return ResponseEntity.ok(ApiResponse.success("AI suggestions generated successfully", suggestions));
     }

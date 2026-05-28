@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "assignments")
-public class Assignment {
+@Document(collection = "tasks")
+public class Task {
 
     @Id
     private String id;
