@@ -88,7 +88,7 @@ export default function ForgotPasswordScreen({ navigation }) {
                   />
                   <TextInput
                     style={styles.input}
-                    placeholder="student@university.com"
+                    placeholder="user@studynova.com"
                     placeholderTextColor="rgba(255,255,255,0.22)"
                     value={email}
                     onChangeText={setEmail}

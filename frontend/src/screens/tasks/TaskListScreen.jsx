@@ -12,39 +12,39 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
-import useAssignmentStore from '../../store/assignmentStore';
-import AssignmentCard from '../../components/cards/AssignmentCard';
+import useTaskStore from '../../store/taskStore';
+import TaskCard from '../../components/cards/TaskCard';
 
-export default function AssignmentListScreen({ navigation }) {
-  const { assignments, isLoading, fetchAssignments, editAssignment } = useAssignmentStore();
+export default function TaskListScreen({ navigation }) {
+  const { tasks, isLoading, fetchTasks, editTask } = useTaskStore();
   const [activeFilter, setActiveFilter] = useState('ALL'); // ALL, PENDING, COMPLETED, OVERDUE
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetchAssignments();
-  }, [fetchAssignments]);
+    fetchTasks();
+  }, [fetchTasks]);
 
-  const handleToggleComplete = async (assignment) => {
-    const updatedStatus = assignment.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED';
-    await editAssignment(assignment.id, {
-      title: assignment.title,
-      description: assignment.description,
-      dueDate: assignment.dueDate,
-      subjectId: assignment.subjectId,
-      subjectName: assignment.subjectName,
+  const handleToggleComplete = async (task) => {
+    const updatedStatus = task.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED';
+    await editTask(task.id, {
+      title: task.title,
+      description: task.description,
+      dueDate: task.dueDate,
+      subjectId: task.subjectId,
+      subjectName: task.subjectName,
       status: updatedStatus,
-      priority: assignment.priority,
-      estimatedHours: assignment.estimatedHours,
-      reminderMinutesBefore: assignment.reminderMinutesBefore
+      priority: task.priority,
+      estimatedHours: task.estimatedHours,
+      reminderMinutesBefore: task.reminderMinutesBefore
     });
   };
 
-  const isOverdue = (assignment) => {
-    return new Date(assignment.dueDate) < new Date() && assignment.status !== 'COMPLETED';
+  const isOverdue = (task) => {
+    return new Date(task.dueDate) < new Date() && task.status !== 'COMPLETED';
   };
 
   // Filter & Search Logic
-  const filteredAssignments = assignments.filter((item) => {
+  const filteredTasks = tasks.filter((item) => {
     // 1. Search Query filter
     const matchesSearch =
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -69,13 +69,13 @@ export default function AssignmentListScreen({ navigation }) {
   const getFilterCount = (filter) => {
     switch (filter) {
       case 'PENDING':
-        return assignments.filter(a => a.status === 'PENDING' && !isOverdue(a)).length;
+        return tasks.filter(t => t.status === 'PENDING' && !isOverdue(t)).length;
       case 'COMPLETED':
-        return assignments.filter(a => a.status === 'COMPLETED').length;
+        return tasks.filter(t => t.status === 'COMPLETED').length;
       case 'OVERDUE':
-        return assignments.filter(a => isOverdue(a)).length;
+        return tasks.filter(t => isOverdue(t)).length;
       default:
-        return assignments.length;
+        return tasks.length;
     }
   };
 
@@ -97,8 +97,8 @@ export default function AssignmentListScreen({ navigation }) {
       />
 
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Assignments</Text>
-        <Text style={styles.headerSubtitle}>Manage your academic milestones</Text>
+        <Text style={styles.headerTitle}>Tasks</Text>
+        <Text style={styles.headerSubtitle}>Manage your study goals and action items</Text>
       </View>
 
       {/* Search Input Panel */}
@@ -106,7 +106,7 @@ export default function AssignmentListScreen({ navigation }) {
         <View style={styles.searchBar}>
           <Ionicons name="search-outline" size={18} color={COLORS.textLight} />
           <TextInput
-            placeholder="Search tasks or subjects..."
+            placeholder="Search tasks..."
             placeholderTextColor={COLORS.textLight}
             style={styles.searchInput}
             value={searchQuery}
@@ -151,21 +151,21 @@ export default function AssignmentListScreen({ navigation }) {
         </View>
       ) : (
         <FlatList
-          data={filteredAssignments}
+          data={filteredTasks}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
-            <AssignmentCard
-              assignment={item}
+            <TaskCard
+              task={item}
               onToggleComplete={() => handleToggleComplete(item)}
-              onPress={() => navigation.navigate('AssignmentDetail', { id: item.id })}
+              onPress={() => navigation.navigate('TaskDetail', { id: item.id })}
             />
           )}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyEmoji}>🎉</Text>
-              <Text style={styles.emptyText}>No assignments found</Text>
+              <Text style={styles.emptyText}>No tasks found</Text>
               <Text style={styles.emptySubtext}>
                 {searchQuery
                   ? "Try checking your spelling or clear search filters"
@@ -179,7 +179,7 @@ export default function AssignmentListScreen({ navigation }) {
       {/* Floating Action Button (FAB) */}
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => navigation.navigate('AddAssignment')}
+        onPress={() => navigation.navigate('AddTask')}
         activeOpacity={0.85}
       >
         <LinearGradient

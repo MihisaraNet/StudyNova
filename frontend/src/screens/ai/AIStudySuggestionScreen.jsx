@@ -26,7 +26,7 @@ export default function AIStudySuggestionScreen() {
     'Initializing AI engine...',
     'Analyzing weekly course subjects...',
     'Evaluating scheduled study timetable...',
-    'Calculating assignment priority scores...',
+    'Calculating task priority scores...',
     'Querying Gemini Pro model...',
     'Structuring personalized academic plan...'
   ];

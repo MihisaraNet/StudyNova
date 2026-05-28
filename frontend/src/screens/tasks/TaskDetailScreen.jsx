@@ -11,30 +11,30 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import useAssignmentStore from '../../store/assignmentStore';
+import useTaskStore from '../../store/taskStore';
 import { COLORS } from '../../constants/colors';
 import AlertPopup from '../../components/common/AlertPopup';
 
-export default function AssignmentDetailScreen() {
+export default function TaskDetailScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const { id } = route.params || {};
 
-  const { assignments, removeAssignment, editAssignment, isLoading } = useAssignmentStore();
-  const [assignment, setAssignment] = useState(null);
+  const { tasks, removeTask, editTask, isLoading } = useTaskStore();
+  const [task, setTask] = useState(null);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   useEffect(() => {
-    const found = assignments.find((a) => a.id === id);
+    const found = tasks.find((t) => t.id === id);
     if (found) {
-      setAssignment(found);
+      setTask(found);
     } else {
       // Fallback go back
       navigation.goBack();
     }
-  }, [id, assignments]);
+  }, [id, tasks]);
 
-  if (!assignment) {
+  if (!task) {
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" color={COLORS.primary} />
@@ -42,7 +42,7 @@ export default function AssignmentDetailScreen() {
     );
   }
 
-  const isCompleted = assignment.status === 'COMPLETED';
+  const isCompleted = task.status === 'COMPLETED';
 
   // Calculate time remaining / relative deadline
   const getTimeRemaining = (dateStr) => {
@@ -64,8 +64,8 @@ export default function AssignmentDetailScreen() {
 
   const handleToggleComplete = async () => {
     const updatedStatus = isCompleted ? 'PENDING' : 'COMPLETED';
-    const result = await editAssignment(assignment.id, {
-      ...assignment,
+    const result = await editTask(task.id, {
+      ...task,
       status: updatedStatus
     });
     if (!result.success) {
@@ -87,7 +87,7 @@ export default function AssignmentDetailScreen() {
     }
   };
 
-  const priorityInfo = getPriorityInfo(assignment.priority);
+  const priorityInfo = getPriorityInfo(task.priority);
 
   return (
     <View style={styles.container}>
@@ -119,21 +119,21 @@ export default function AssignmentDetailScreen() {
                 {isCompleted ? 'Completed' : 'Active'}
               </Text>
             </View>
-            {assignment.subjectName ? (
+            {task.subjectName ? (
               <View style={styles.subjectBadge}>
                 <Text style={styles.subjectText} numberOfLines={1}>
-                  📚 {assignment.subjectName}
+                  📚 {task.subjectName}
                 </Text>
               </View>
             ) : null}
           </View>
 
           <Text style={[styles.title, isCompleted && styles.completedTitle]}>
-            {assignment.title}
+            {task.title}
           </Text>
 
-          <Text style={[styles.timeRemaining, isOverdue(assignment) && !isCompleted && styles.overdueText]}>
-            {getTimeRemaining(assignment.dueDate)}
+          <Text style={[styles.timeRemaining, isOverdue(task) && !isCompleted && styles.overdueText]}>
+            {getTimeRemaining(task.dueDate)}
           </Text>
         </View>
 
@@ -142,21 +142,21 @@ export default function AssignmentDetailScreen() {
           <View style={styles.metricItem}>
             <Text style={styles.metricLabel}>Priority</Text>
             <Text style={[styles.metricValue, { color: priorityInfo.color }]}>
-              {assignment.priority || 'MEDIUM'}
+              {task.priority || 'MEDIUM'}
             </Text>
           </View>
           <View style={styles.metricDivider} />
           <View style={styles.metricItem}>
             <Text style={styles.metricLabel}>Study Time</Text>
             <Text style={[styles.metricValue, { color: COLORS.primaryLight }]}>
-              {assignment.estimatedHours || 2.0}h
+              {task.estimatedHours || 2.0}h
             </Text>
           </View>
           <View style={styles.metricDivider} />
           <View style={styles.metricItem}>
             <Text style={styles.metricLabel}>Alarm Mins</Text>
             <Text style={[styles.metricValue, { color: COLORS.warning }]}>
-              {assignment.reminderMinutesBefore || 60}m
+              {task.reminderMinutesBefore || 60}m
             </Text>
           </View>
         </View>
@@ -164,10 +164,10 @@ export default function AssignmentDetailScreen() {
         {/* Description Panel */}
         <Text style={styles.sectionLabel}>Notes & Instructions</Text>
         <View style={styles.descCard}>
-          {assignment.description ? (
-            <Text style={styles.descText}>{assignment.description}</Text>
+          {task.description ? (
+            <Text style={styles.descText}>{task.description}</Text>
           ) : (
-            <Text style={styles.descPlaceholder}>No additional notes logged for this assignment.</Text>
+            <Text style={styles.descPlaceholder}>No additional notes logged for this task.</Text>
           )}
         </View>
 
@@ -186,14 +186,14 @@ export default function AssignmentDetailScreen() {
               color={COLORS.white}
             />
             <Text style={styles.actionBtnText}>
-              {isCompleted ? 'Mark as In-Complete' : 'Mark as Completed'}
+              {isCompleted ? 'Mark as Inactive' : 'Mark as Completed'}
             </Text>
           </TouchableOpacity>
 
           {/* Edit Button */}
           <TouchableOpacity
             style={styles.editBtn}
-            onPress={() => navigation.navigate('AddAssignment', { assignment })}
+            onPress={() => navigation.navigate('AddTask', { task })}
           >
             <Ionicons name="create-outline" size={20} color={COLORS.textPrimary} />
             <Text style={styles.editBtnText}>Edit Task Details</Text>
@@ -206,13 +206,13 @@ export default function AssignmentDetailScreen() {
       {/* Custom Destructive Alert Popup */}
       <AlertPopup
         visible={showDeleteAlert}
-        title="Delete Assignment"
-        message="Are you sure you want to permanently delete this assignment? This action is irreversible."
+        title="Delete Task"
+        message="Are you sure you want to permanently delete this task? This action is irreversible."
         type="danger"
         confirmLabel="Delete"
         onConfirm={async () => {
           setShowDeleteAlert(false);
-          const result = await removeAssignment(assignment.id);
+          const result = await removeTask(task.id);
           if (result.success) {
             navigation.goBack();
           } else {
@@ -225,8 +225,8 @@ export default function AssignmentDetailScreen() {
   );
 }
 
-const isOverdue = (asg) => {
-  return new Date(asg.dueDate) < new Date() && asg.status !== 'COMPLETED';
+const isOverdue = (t) => {
+  return new Date(t.dueDate) < new Date() && t.status !== 'COMPLETED';
 };
 
 const styles = StyleSheet.create({

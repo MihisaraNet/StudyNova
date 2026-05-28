@@ -5,19 +5,17 @@ import { COLORS } from '../constants/colors';
 
 import DashboardNavigator   from './DashboardNavigator';
 import SubjectNavigator     from './SubjectNavigator';
-import AssignmentNavigator  from './AssignmentNavigator';
+import TaskNavigator        from './TaskNavigator';
 import TimetableNavigator   from './TimetableNavigator';
 import ProfileScreen        from '../screens/profile/ProfileScreen';
-import GPACalculatorScreen  from '../screens/gpa/GPACalculatorScreen';
 
 const Tab = createBottomTabNavigator();
 
 const tabIcons = {
   Dashboard:   ['grid',         'grid-outline'],
   Subjects:    ['book',         'book-outline'],
-  Assignments: ['checkmark-circle', 'checkmark-circle-outline'],
+  Tasks:       ['checkmark-circle', 'checkmark-circle-outline'],
   Timetable:   ['calendar',     'calendar-outline'],
-  GPA:         ['school',       'school-outline'],
   Profile:     ['person',       'person-outline'],
 };
 
@@ -29,7 +27,7 @@ export default function MainTabNavigator() {
         tabBarActiveTintColor:   COLORS.primary,
         tabBarInactiveTintColor: COLORS.textLight,
         tabBarStyle: {
-          backgroundColor: '#161334', // Dark semi-transparent or solid dark
+          backgroundColor: '#161334', // Dark solid dark
           borderTopColor:  'rgba(255,255,255,0.06)',
           borderTopWidth:  1,
           height: 62,
@@ -51,11 +49,9 @@ export default function MainTabNavigator() {
     >
       <Tab.Screen name="Dashboard"      component={DashboardNavigator} />
       <Tab.Screen name="Subjects"       component={SubjectNavigator} />
-      <Tab.Screen name="Assignments"    component={AssignmentNavigator} />
+      <Tab.Screen name="Tasks"          component={TaskNavigator} />
       <Tab.Screen name="Timetable"      component={TimetableNavigator} />
-      <Tab.Screen name="GPA"            component={GPACalculatorScreen} />
       <Tab.Screen name="Profile"        component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
-
