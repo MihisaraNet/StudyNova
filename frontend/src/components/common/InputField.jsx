@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.white,
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
     borderWidth: 1.5,
     borderColor: COLORS.border,
     borderRadius: 12,
