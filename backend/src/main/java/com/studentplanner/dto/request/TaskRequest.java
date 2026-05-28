@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class AssignmentRequest {
+public class TaskRequest {
 
     @NotBlank(message = "Title is required")
     private String title;
