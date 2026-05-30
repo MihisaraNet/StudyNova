@@ -14,12 +14,14 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
+import api from '../../services/api';
 
 export default function ForgotPasswordScreen({ navigation }) {
   const [email,   setEmail]   = useState('');
   const [focused, setFocused] = useState(false);
   const [loading, setLoading] = useState(false);
   const [sent,    setSent]    = useState(false);
+  const [tempPassword, setTempPassword] = useState('');
 
   const isValid = email.trim().includes('@') && email.trim().includes('.');
 
@@ -29,8 +31,20 @@ export default function ForgotPasswordScreen({ navigation }) {
       return;
     }
     setLoading(true);
-    // TODO: await api.post('/api/auth/forgot-password', { email })
-    setTimeout(() => { setLoading(false); setSent(true); }, 1600);
+    try {
+      const response = await api.post('/api/auth/forgot-password', { email: email.trim() });
+      setLoading(false);
+      if (response.data?.success) {
+        setTempPassword(response.data?.data?.tempPassword || '');
+        setSent(true);
+      } else {
+        Alert.alert('Error', response.data?.message || 'Something went wrong.');
+      }
+    } catch (error) {
+      setLoading(false);
+      const errMsg = error.response?.data?.message || error.message || 'Failed to send reset link.';
+      Alert.alert('Password Reset Failed', errMsg);
+    }
   };
 
   return (
@@ -164,8 +178,16 @@ export default function ForgotPasswordScreen({ navigation }) {
 
               <Text style={styles.successTitle}>Yayy! All Set</Text>
               <Text style={styles.successMsg}>
-                Your username and password has been sent to your mail
+                A temporary password has been successfully generated. Use it to log in and change it in your Profile.
               </Text>
+
+              {tempPassword ? (
+                <View style={styles.tempPassBox}>
+                  <Text style={styles.tempPassLabel}>TEMPORARY PASSWORD</Text>
+                  <Text style={styles.tempPassVal}>{tempPassword}</Text>
+                </View>
+              ) : null}
+
               <Text style={styles.emailChip}>{email}</Text>
 
               <TouchableOpacity
@@ -348,5 +370,28 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     width: '100%',
     textAlign: 'center',
+  },
+  tempPassBox: {
+    backgroundColor: 'rgba(108,99,255,0.08)',
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: 'rgba(108,99,255,0.25)',
+    padding: 16,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  tempPassLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: 'rgba(255,255,255,0.4)',
+    letterSpacing: 0.8,
+    marginBottom: 6,
+  },
+  tempPassVal: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#6C63FF',
+    letterSpacing: 1,
   },
 });
