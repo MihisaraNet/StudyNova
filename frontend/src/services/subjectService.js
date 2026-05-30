@@ -1,8 +1,7 @@
 import api from './api';
 
-export const getSubjects = async (semester) => {
-  const url = semester ? `/api/subjects?semester=${encodeURIComponent(semester)}` : '/api/subjects';
-  const response = await api.get(url);
+export const getSubjects = async () => {
+  const response = await api.get('/api/subjects');
   return response.data;
 };
 
