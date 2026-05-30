@@ -6,10 +6,10 @@ const useSubjectStore = create((set, get) => ({
   isLoading: false,
   error: null,
 
-  fetchSubjects: async (semester) => {
+  fetchSubjects: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await subjectService.getSubjects(semester);
+      const response = await subjectService.getSubjects();
       if (response.success) {
         set({ subjects: response.data, isLoading: false });
       } else {

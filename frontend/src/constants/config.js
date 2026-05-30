@@ -25,12 +25,4 @@ export const GEMINI_API_URL =
 // ─── Pagination ──────────────────────────────────────────────────────────────
 export const PAGE_SIZE = 10;
 
-// ─── GPA ────────────────────────────────────────────────────────────────────
-export const GPA_SCALE = 4.0;
 
-export const SEMESTERS = [
-  'Y1S1', 'Y1S2',
-  'Y2S1', 'Y2S2',
-  'Y3S1', 'Y3S2',
-  'Y4S1', 'Y4S2',
-];
