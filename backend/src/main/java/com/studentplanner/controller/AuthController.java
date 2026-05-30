@@ -46,6 +46,9 @@ public class AuthController {
     // ─── GET /api/auth/me ─────────────────────────────────────────────────────
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<User>> getCurrentUser(Authentication authentication) {
+        if (authentication == null) {
+            throw new IllegalArgumentException("Authentication credentials are missing or invalid.");
+        }
         User user = authService.getUserByEmail(authentication.getName());
         // Remove password before returning
         user.setPassword(null);
@@ -58,6 +61,9 @@ public class AuthController {
             @RequestBody Map<String, Object> updates,
             Authentication authentication) {
 
+        if (authentication == null) {
+            throw new IllegalArgumentException("Authentication credentials are missing or invalid.");
+        }
         String name     = (String) updates.get("name");
 
         User updated = authService.updateProfile(authentication.getName(), name);
@@ -71,6 +77,9 @@ public class AuthController {
             @RequestBody Map<String, String> body,
             Authentication authentication) {
 
+        if (authentication == null) {
+            throw new IllegalArgumentException("Authentication credentials are missing or invalid.");
+        }
         authService.changePassword(
                 authentication.getName(),
                 body.get("currentPassword"),
