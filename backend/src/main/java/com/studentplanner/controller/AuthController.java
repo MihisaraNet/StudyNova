@@ -1,5 +1,6 @@
 package com.studentplanner.controller;
 
+import com.studentplanner.dto.request.ForgotPasswordRequest;
 import com.studentplanner.dto.request.LoginRequest;
 import com.studentplanner.dto.request.RegisterRequest;
 import com.studentplanner.dto.response.ApiResponse;
@@ -83,5 +84,16 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout() {
         return ResponseEntity.ok(ApiResponse.success("Logged out successfully. Delete token on client."));
+    }
+
+    // ─── POST /api/auth/forgot-password ───────────────────────────────────────
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<Map<String, String>>> forgotPassword(
+            @Valid @RequestBody ForgotPasswordRequest request) {
+        String tempPassword = authService.forgotPassword(request.getEmail());
+        return ResponseEntity.ok(ApiResponse.success(
+                "Temporary password generated successfully",
+                Map.of("tempPassword", tempPassword)
+        ));
     }
 }

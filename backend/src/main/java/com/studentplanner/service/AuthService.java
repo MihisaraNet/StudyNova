@@ -109,4 +109,27 @@ public class AuthService {
         user.setUpdatedAt(java.time.LocalDateTime.now());
         userRepository.save(user);
     }
+
+    // ─── Forgot password ──────────────────────────────────────────────────────
+
+    public String forgotPassword(String email) {
+        User user = userRepository.findByEmail(email.toLowerCase().trim())
+                .orElseThrow(() -> new IllegalArgumentException("No user found with this email address."));
+
+        // Generate a secure temporary password
+        String tempPassword = "Nova-" + (1000 + new java.util.Random().nextInt(9000));
+
+        user.setPassword(passwordEncoder.encode(tempPassword));
+        user.setUpdatedAt(java.time.LocalDateTime.now());
+        userRepository.save(user);
+
+        // Print to system output for easy local development log tracking
+        System.out.println("=========================================");
+        System.out.println("PASSWORD RESET REQUEST");
+        System.out.println("Email: " + email);
+        System.out.println("Temp Password: " + tempPassword);
+        System.out.println("=========================================");
+
+        return tempPassword;
+    }
 }
