@@ -35,9 +35,16 @@ api.interceptors.response.use(
     if (error.response) {
       const { status } = error.response;
 
-      if (status === 401) {
-        // Token expired — clear storage and redirect (handled by AuthContext)
-        await storage.deleteItem(TOKEN_KEY);
+      if (status === 401 || status === 403) {
+        // Session expired or Access Denied — clear storage and force sign out
+        try {
+          const authStore = require('../store/authStore').default;
+          authStore.getState().logout();
+        } catch (e) {
+          // Fallback if dynamic import fails
+          await storage.deleteItem(TOKEN_KEY);
+          await storage.deleteItem(USER_KEY);
+        }
       }
     } else if (error.request) {
       // Network error — no response received
