@@ -119,5 +119,5 @@ Ensure you have the following installed locally:
 
 ---
 
-## 📄 License
-This project is licensed under the MIT License. Developed by Isula Mihisara.
+## 📄 Copyright
+© 2026 Isula Mihisara. All Rights Reserved.
