@@ -58,21 +58,24 @@ export default function TimetableScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#0F0C29', '#302B63', '#24243E']}
+        colors={COLORS.gradientDark}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.2, y: 0 }}
         end={{ x: 0.8, y: 1 }}
       />
       
+      {/* Dynamic light blob */}
+      <View style={styles.blurBlob} />
+      
       {/* ─── Top Header Card ──────────────────────────────────────────────────── */}
       <View style={styles.header}>
         <View style={styles.headerRow}>
           <View>
-            <Text style={styles.headerTitle}>Study Timetable</Text>
+            <Text style={styles.headerTitle}>Timetable</Text>
             <Text style={styles.headerSubtitle}>Schedule your routine for academic success</Text>
           </View>
           <View style={styles.iconContainer}>
-            <Ionicons name="calendar" size={26} color={COLORS.primaryLight} />
+            <Ionicons name="calendar" size={22} color={COLORS.primaryLight} />
           </View>
         </View>
       </View>
@@ -94,6 +97,7 @@ export default function TimetableScreen() {
                   isActive && styles.dayCardActive
                 ]}
                 onPress={() => setSelectedDay(day.full)}
+                activeOpacity={0.8}
               >
                 {isActive && (
                   <LinearGradient
@@ -118,7 +122,7 @@ export default function TimetableScreen() {
       {/* ─── Study Sessions Scroll Agenda ────────────────────────────────────── */}
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
+          <ActivityIndicator size="large" color={COLORS.primaryLight} />
           <Text style={styles.loadingText}>Syncing scheduled study blocks...</Text>
         </View>
       ) : (
@@ -126,7 +130,7 @@ export default function TimetableScreen() {
           {filteredSessions.length === 0 ? (
             <View style={styles.emptyState}>
               <View style={styles.emptyIconCircle}>
-                <Ionicons name="sparkles-outline" size={44} color={COLORS.textLight} />
+                <Ionicons name="sparkles-outline" size={38} color={COLORS.textLight} />
               </View>
               <Text style={styles.emptyStateTitle}>No sessions scheduled</Text>
               <Text style={styles.emptyStateSubtitle}>
@@ -137,7 +141,7 @@ export default function TimetableScreen() {
             filteredSessions.map((session) => (
               <View key={session.id} style={styles.sessionCard}>
                 {/* Visual colored tag border */}
-                <View style={[styles.colorTag, { backgroundColor: session.color }]} />
+                <View style={[styles.colorTag, { backgroundColor: session.color || COLORS.primary }]} />
 
                 <View style={styles.sessionCardContent}>
                   <View style={styles.sessionHeader}>
@@ -147,13 +151,13 @@ export default function TimetableScreen() {
                         style={styles.actionBtn}
                         onPress={() => navigation.navigate('AddSession', { session })}
                       >
-                        <Ionicons name="pencil" size={16} color={COLORS.textSecondary} />
+                        <Ionicons name="pencil" size={15} color={COLORS.primaryLight} />
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.actionBtn}
                         onPress={() => handleDeleteSession(session.id, session.title)}
                       >
-                        <Ionicons name="trash" size={16} color={COLORS.error} />
+                        <Ionicons name="trash" size={15} color={COLORS.error} />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -162,7 +166,7 @@ export default function TimetableScreen() {
 
                   <View style={styles.detailsRow}>
                     <View style={styles.detailItem}>
-                      <Ionicons name="time-outline" size={14} color={COLORS.textSecondary} />
+                      <Ionicons name="time-outline" size={13} color={COLORS.textSecondary} />
                       <Text style={styles.detailText}>
                         {session.startTime} - {session.endTime}
                       </Text>
@@ -170,7 +174,7 @@ export default function TimetableScreen() {
                     
                     {session.location && session.location.trim() !== '' && (
                       <View style={styles.detailItem}>
-                        <Ionicons name="location-outline" size={14} color={COLORS.textSecondary} />
+                        <Ionicons name="location-outline" size={13} color={COLORS.textSecondary} />
                         <Text style={styles.detailText} numberOfLines={1}>
                           {session.location}
                         </Text>
@@ -195,8 +199,9 @@ export default function TimetableScreen() {
 
       {/* ─── Floating Action Button (FAB) ─────────────────────────────────────── */}
       <TouchableOpacity
-        style={styles.fab}
+        style={[styles.fab, COLORS.glowIndigo]}
         onPress={() => navigation.navigate('AddSession')}
+        activeOpacity={0.85}
       >
         <LinearGradient
           colors={COLORS.gradientPrimary}
@@ -213,10 +218,19 @@ export default function TimetableScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  blurBlob: {
+    position: 'absolute',
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: 'rgba(108, 99, 255, 0.08)',
+    bottom: 100,
+    left: -60,
+  },
   header: {
     paddingHorizontal: 20,
-    paddingTop: 55,
-    paddingBottom: 15,
+    paddingTop: 64,
+    paddingBottom: 16,
   },
   headerRow: {
     flexDirection: 'row',
@@ -224,76 +238,74 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: 28,
+    fontWeight: '950',
     color: COLORS.textPrimary,
+    letterSpacing: -0.5,
   },
   headerSubtitle: {
     fontSize: 13,
     color: COLORS.textSecondary,
     marginTop: 4,
+    fontWeight: '500',
   },
   iconContainer: {
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: COLORS.surface,
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
   },
   daySelectorContainer: {
-    paddingVertical: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.02)',
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.borderLight,
+    paddingVertical: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.01)',
+    borderBottomWidth: 1.5,
+    borderBottomColor: 'rgba(255, 255, 255, 0.06)',
   },
   daySelectorScroll: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     gap: 8,
   },
   dayCard: {
-    width: 60,
+    width: 62,
     height: 70,
-    borderRadius: 12,
-    backgroundColor: COLORS.surface,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
   },
   dayCardActive: {
     borderColor: 'transparent',
-    elevation: 4,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
   },
   dayShortText: {
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '800',
     color: COLORS.textPrimary,
   },
   dayFullText: {
     fontSize: 10,
     color: COLORS.textSecondary,
     marginTop: 4,
+    fontWeight: '600',
   },
   dayTextActive: {
     color: COLORS.white,
   },
   daySubTextActive: {
-    color: 'rgba(255, 255, 255, 0.8)',
-    fontWeight: '600',
+    color: 'rgba(255, 255, 255, 0.85)',
+    fontWeight: '700',
   },
   agendaScroll: {
     paddingHorizontal: 20,
-    paddingTop: 15,
-    paddingBottom: 100, // Safe padding for FAB
+    paddingTop: 16,
+    paddingBottom: 100,
   },
   loadingContainer: {
     flex: 1,
@@ -304,6 +316,7 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
     marginTop: 10,
     fontSize: 14,
+    fontWeight: '600',
   },
   emptyState: {
     alignItems: 'center',
@@ -311,19 +324,19 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
   },
   emptyIconCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: COLORS.surface,
+    width: 76,
+    height: 76,
+    borderRadius: 38,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
     marginBottom: 20,
   },
   emptyStateTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '800',
     color: COLORS.textPrimary,
   },
   emptyStateSubtitle: {
@@ -332,15 +345,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 30,
     marginTop: 8,
-    lineHeight: 18,
+    lineHeight: 19,
   },
   sessionCard: {
     flexDirection: 'row',
-    backgroundColor: COLORS.surface,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: 14,
-    marginBottom: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
+    borderRadius: 16,
+    marginBottom: 14,
     overflow: 'hidden',
   },
   colorTag: {
@@ -358,7 +371,7 @@ const styles = StyleSheet.create({
   },
   subjectName: {
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: '800',
     color: COLORS.primaryLight,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
@@ -368,19 +381,23 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   actionBtn: {
-    padding: 4,
+    padding: 6,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
+    borderRadius: 8,
   },
   sessionTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: COLORS.textPrimary,
-    marginTop: 4,
+    marginTop: 6,
   },
   detailsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 15,
-    marginTop: 10,
+    marginTop: 12,
   },
   detailItem: {
     flexDirection: 'row',
@@ -390,12 +407,13 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 12,
     color: COLORS.textSecondary,
+    fontWeight: '600',
   },
   reminderBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: 'rgba(255, 179, 71, 0.08)',
+    backgroundColor: 'rgba(251, 191, 36, 0.08)',
     alignSelf: 'flex-start',
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -404,7 +422,7 @@ const styles = StyleSheet.create({
   },
   reminderText: {
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: '700',
     color: COLORS.warning,
   },
   fab: {
@@ -414,11 +432,6 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    elevation: 6,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
   },
   fabGradient: {
     flex: 1,
