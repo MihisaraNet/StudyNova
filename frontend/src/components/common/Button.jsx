@@ -34,7 +34,12 @@ export default function Button({
       <TouchableOpacity
         onPress={onPress}
         disabled={isDisabled}
-        style={[styles.btnWrapper, isDisabled && styles.disabled, style]}
+        style={[
+          styles.btnWrapper,
+          !isDisabled && COLORS.glowIndigo, // Sleek Indigo glow shadow
+          isDisabled && styles.disabled,
+          style
+        ]}
         activeOpacity={0.85}
       >
         <LinearGradient
@@ -63,7 +68,12 @@ export default function Button({
       <TouchableOpacity
         onPress={onPress}
         disabled={isDisabled}
-        style={[styles.outline, sizeStyles[size], isDisabled && styles.disabled, style]}
+        style={[
+          styles.outline,
+          sizeStyles[size],
+          isDisabled && styles.disabled,
+          style
+        ]}
         activeOpacity={0.8}
       >
         {loading ? (
@@ -83,7 +93,12 @@ export default function Button({
       <TouchableOpacity
         onPress={onPress}
         disabled={isDisabled}
-        style={[styles.danger, sizeStyles[size], isDisabled && styles.disabled, style]}
+        style={[
+          styles.danger,
+          sizeStyles[size],
+          isDisabled && styles.disabled,
+          style
+        ]}
         activeOpacity={0.8}
       >
         {loading ? (
@@ -113,10 +128,10 @@ const styles = StyleSheet.create({
   gradient:   { alignItems: 'center', justifyContent: 'center' },
   outline: {
     borderWidth: 1.5,
-    borderColor: COLORS.primary,
+    borderColor: 'rgba(108, 99, 255, 0.4)', // Frost purple outline
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.primaryPale,
+    backgroundColor: COLORS.surface, // Clean translucent surface
   },
   danger: {
     backgroundColor: COLORS.error,
@@ -124,7 +139,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 12,
   },
-  disabled: { opacity: 0.55 },
+  disabled: { opacity: 0.4 },
   row:      { flexDirection: 'row', alignItems: 'center', gap: 8 },
   iconWrap: { marginRight: 2 },
   labelPrimary: {
@@ -133,7 +148,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   labelOutline: {
-    color: COLORS.primary,
+    color: COLORS.primaryLight,
     fontWeight: '700',
     letterSpacing: 0.3,
   },
