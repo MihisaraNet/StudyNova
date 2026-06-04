@@ -7,9 +7,9 @@
 
 import { Platform } from 'react-native';
 
-export const API_BASE_URL = __DEV__
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || (__DEV__
   ? (Platform.OS === 'web' ? 'http://localhost:8080' : 'http://10.0.2.2:8080')
-  : 'https://your-app.onrender.com';
+  : 'https://your-app.onrender.com');
 
 export const API_TIMEOUT = 10000; // 10 seconds
 
