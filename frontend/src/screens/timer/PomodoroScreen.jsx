@@ -17,6 +17,7 @@ import { COLORS } from '../../constants/colors';
 import useTimerStore, { TIMER_MODES } from '../../store/timerStore';
 import useSubjectStore from '../../store/subjectStore';
 import useTimetableStore from '../../store/timetableStore';
+import { getDayOfWeekString, formatTimeHHMM } from '../../utils/dateUtils';
 
 // ─── SVG Ring ─────────────────────────────────────────────────────────────────
 const RING_SIZE   = 240;
@@ -33,7 +34,7 @@ function TimerRing({ progress, color }) {
         cx={RING_SIZE / 2}
         cy={RING_SIZE / 2}
         r={RADIUS}
-        stroke="rgba(255,255,255,0.07)"
+        stroke="rgba(255,255,255,0.06)"
         strokeWidth={STROKE_W}
         fill="none"
       />
@@ -59,7 +60,10 @@ function ModeBtn({ modeKey, currentMode, onPress }) {
   const info   = TIMER_MODES[modeKey];
   return (
     <TouchableOpacity
-      style={[styles.modeBtn, active && { backgroundColor: info.color + '30', borderColor: info.color }]}
+      style={[
+        styles.modeBtn,
+        active && { backgroundColor: info.color + '20', borderColor: info.color }
+      ]}
       onPress={() => onPress(modeKey)}
       activeOpacity={0.75}
     >
@@ -123,9 +127,9 @@ export default function PomodoroScreen({ navigation }) {
         subjectId:   selectedSubject?.id   || null,
         subjectName: selectedSubject?.name || 'Pomodoro Session',
         title:       `Pomodoro — ${selectedSubject?.name || 'Study'}`,
-        startTime:   start.toISOString(),
-        endTime:     now.toISOString(),
-        notes:       'Auto-saved from Pomodoro timer',
+        dayOfWeek:   getDayOfWeekString(now),
+        startTime:   formatTimeHHMM(start),
+        endTime:     formatTimeHHMM(now),
         reminderEnabled: false,
       };
       await addSession(sessionData);
@@ -156,11 +160,14 @@ export default function PomodoroScreen({ navigation }) {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <LinearGradient
-        colors={['#0F0C29', '#302B63', '#24243E']}
+        colors={COLORS.gradientDark}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.2, y: 0 }}
         end={{ x: 0.8, y: 1 }}
       />
+      
+      {/* Decorative Blob */}
+      <View style={styles.blurBlob} />
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
 
@@ -169,7 +176,7 @@ export default function PomodoroScreen({ navigation }) {
           <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()} activeOpacity={0.7}>
             <Ionicons name="arrow-back" size={20} color="#fff" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Pomodoro Timer</Text>
+          <Text style={styles.headerTitle}>Focus Timer</Text>
           <View style={styles.sessionBadge}>
             <Ionicons name="flame" size={14} color={COLORS.warning} />
             <Text style={styles.sessionCount}>{sessionCount}</Text>
@@ -208,11 +215,11 @@ export default function PomodoroScreen({ navigation }) {
         {/* ── Controls ── */}
         <View style={styles.controls}>
           <TouchableOpacity style={styles.resetBtn} onPress={reset} activeOpacity={0.8}>
-            <Ionicons name="refresh" size={22} color={COLORS.textSecondary} />
+            <Ionicons name="refresh" size={20} color={COLORS.textSecondary} />
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.playBtn, { backgroundColor: color }]}
+            style={[styles.playBtn, { backgroundColor: color, shadowColor: color }]}
             onPress={isRunning ? pause : start}
             activeOpacity={0.85}
           >
@@ -224,7 +231,7 @@ export default function PomodoroScreen({ navigation }) {
             onPress={() => { pause(); setMode('FOCUS'); reset(); }}
             activeOpacity={0.8}
           >
-            <Ionicons name="stop" size={22} color={COLORS.textSecondary} />
+            <Ionicons name="stop" size={20} color={COLORS.textSecondary} />
           </TouchableOpacity>
         </View>
 
@@ -239,7 +246,7 @@ export default function PomodoroScreen({ navigation }) {
             <Text style={styles.infoText}>Focus sessions auto-save to your timetable</Text>
           </View>
           <View style={styles.infoRow}>
-            <Ionicons name="information-circle-outline" size={16} color={COLORS.primary} />
+            <Ionicons name="information-circle-outline" size={16} color={COLORS.primaryLight} />
             <Text style={styles.infoText}>25 min focus · 5 min short break · 15 min long break</Text>
           </View>
         </View>
@@ -280,7 +287,7 @@ export default function PomodoroScreen({ navigation }) {
                   <View style={[styles.subjectDot, { backgroundColor: item.color || COLORS.primary }]} />
                   <Text style={styles.subjectItemText}>{item.name}</Text>
                   {selectedSubject?.id === item.id && (
-                    <Ionicons name="checkmark-circle" size={18} color={COLORS.primary} />
+                    <Ionicons name="checkmark-circle" size={18} color={COLORS.primaryLight} />
                   )}
                 </TouchableOpacity>
               )}
@@ -299,11 +306,19 @@ export default function PomodoroScreen({ navigation }) {
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
   container: { flex: 1 },
-
+  blurBlob: {
+    position: 'absolute',
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: 'rgba(108, 99, 255, 0.08)',
+    top: 150,
+    right: -60,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 56,
+    paddingTop: 64,
     paddingHorizontal: 20,
     paddingBottom: 16,
   },
@@ -311,24 +326,26 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.06)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
   },
-  headerTitle: { flex: 1, fontSize: 20, fontWeight: '800', color: '#fff' },
+  headerTitle: { flex: 1, fontSize: 20, fontWeight: '850', color: '#fff', letterSpacing: -0.5 },
   sessionBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,179,71,0.15)',
+    backgroundColor: 'rgba(255,179,71,0.12)',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 20,
     gap: 4,
     borderWidth: 1,
-    borderColor: 'rgba(255,179,71,0.3)',
+    borderColor: 'rgba(255,179,71,0.22)',
   },
-  sessionCount: { color: COLORS.warning, fontWeight: '700', fontSize: 14 },
+  sessionCount: { color: COLORS.warning, fontWeight: '750', fontSize: 13 },
 
   modeRow: {
     flexDirection: 'row',
@@ -338,16 +355,16 @@ const styles = StyleSheet.create({
   },
   modeBtn: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 12,
     alignItems: 'center',
-    borderRadius: 12,
+    borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.1)',
-    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
   },
   modeBtnText: {
     color: COLORS.textSecondary,
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '700',
   },
 
@@ -361,22 +378,22 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
   },
-  timerText:  { fontSize: 56, fontWeight: '800', letterSpacing: -2 },
-  modeLabel:  { fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: '600', marginTop: 4 },
+  timerText:  { fontSize: 56, fontWeight: '900', letterSpacing: -1.5 },
+  modeLabel:  { fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: '700', marginTop: 4 },
 
   subjectBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 24,
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 13,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.06)',
     marginBottom: 28,
   },
-  subjectBtnText: { flex: 1, color: COLORS.textSecondary, fontSize: 13, fontWeight: '600' },
+  subjectBtnText: { flex: 1, color: COLORS.textSecondary, fontSize: 13, fontWeight: '700' },
 
   controls: {
     flexDirection: 'row',
@@ -386,38 +403,38 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   resetBtn: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
-    backgroundColor: 'rgba(255,255,255,0.07)',
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: 'rgba(255,255,255,0.04)',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   playBtn: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 76,
+    height: 76,
+    borderRadius: 38,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.4,
-    shadowRadius: 16,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 6,
   },
 
   infoCard: {
     marginHorizontal: 24,
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
     borderRadius: 16,
     padding: 16,
-    gap: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.07)',
+    gap: 12,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   infoRow:  { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  infoText: { color: COLORS.textSecondary, fontSize: 12, flex: 1, lineHeight: 18 },
+  infoText: { color: COLORS.textSecondary, fontSize: 12, flex: 1, lineHeight: 18, fontWeight: '600' },
 
   // Modal
   modalOverlay: {
@@ -426,12 +443,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalSheet: {
-    backgroundColor: '#1A1740',
+    backgroundColor: '#0E0B1F',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 20,
     maxHeight: '70%',
-    borderTopWidth: 1,
+    borderTopWidth: 1.5,
     borderColor: 'rgba(255,255,255,0.08)',
   },
   modalHandle: {
@@ -442,7 +459,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 16,
   },
-  modalTitle: { fontSize: 17, fontWeight: '700', color: '#fff', marginBottom: 16 },
+  modalTitle: { fontSize: 17, fontWeight: '800', color: '#fff', marginBottom: 16 },
   subjectItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -450,21 +467,24 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     gap: 12,
     marginBottom: 6,
-    backgroundColor: 'rgba(255,255,255,0.04)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   subjectItemActive: {
-    backgroundColor: 'rgba(108,99,255,0.15)',
-    borderWidth: 1,
-    borderColor: COLORS.primary + '60',
+    backgroundColor: 'rgba(108,99,255,0.12)',
+    borderColor: COLORS.primary + '50',
   },
-  subjectItemText: { flex: 1, color: '#fff', fontSize: 14, fontWeight: '600' },
+  subjectItemText: { flex: 1, color: '#fff', fontSize: 14, fontWeight: '700' },
   subjectDot: { width: 10, height: 10, borderRadius: 5 },
   modalClose: {
-    marginTop: 8,
+    marginTop: 12,
     padding: 16,
     alignItems: 'center',
-    borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    borderRadius: 14,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
-  modalCloseText: { color: COLORS.textSecondary, fontSize: 14, fontWeight: '600' },
+  modalCloseText: { color: COLORS.textSecondary, fontSize: 14, fontWeight: '700' },
 });
