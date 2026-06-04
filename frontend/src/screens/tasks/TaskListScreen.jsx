@@ -90,11 +90,14 @@ export default function TaskListScreen({ navigation }) {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <LinearGradient
-        colors={['#0F0C29', '#302B63', '#24243E']}
+        colors={COLORS.gradientDark}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.2, y: 0 }}
         end={{ x: 0.8, y: 1 }}
       />
+      
+      {/* Dynamic light blobs */}
+      <View style={styles.blurBlob1} />
 
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Tasks</Text>
@@ -147,7 +150,7 @@ export default function TaskListScreen({ navigation }) {
       {/* Tasks List */}
       {isLoading ? (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
+          <ActivityIndicator size="large" color={COLORS.primaryLight} />
         </View>
       ) : (
         <FlatList
@@ -178,7 +181,7 @@ export default function TaskListScreen({ navigation }) {
 
       {/* Floating Action Button (FAB) */}
       <TouchableOpacity
-        style={styles.fab}
+        style={[styles.fab, COLORS.glowIndigo]}
         onPress={() => navigation.navigate('AddTask')}
         activeOpacity={0.85}
       >
@@ -199,6 +202,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  blurBlob1: {
+    position: 'absolute',
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: 'rgba(108, 99, 255, 0.08)',
+    top: 100,
+    left: -50,
+  },
   header: {
     paddingTop: 64,
     paddingHorizontal: 20,
@@ -206,9 +218,9 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: '800',
+    fontWeight: '950',
     color: COLORS.textPrimary,
-    letterSpacing: 0.5,
+    letterSpacing: -0.5,
   },
   headerSubtitle: {
     fontSize: 13,
@@ -223,19 +235,18 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
     paddingHorizontal: 12,
-    height: 44,
+    height: 48,
   },
   searchInput: {
     flex: 1,
     color: COLORS.textPrimary,
     fontSize: 14,
     marginLeft: 8,
-    fontFamily: 'System',
   },
   filterContainer: {
     flexDirection: 'row',
@@ -245,31 +256,31 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   filterTab: {
-    backgroundColor: COLORS.surface,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    paddingVertical: 8,
+    paddingHorizontal: 14,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
   },
   activeFilterTab: {
     backgroundColor: COLORS.primary,
-    borderColor: COLORS.primary,
+    borderColor: COLORS.primaryLight,
   },
   hasOverdueTab: {
-    borderColor: 'rgba(255, 92, 106, 0.4)',
+    borderColor: 'rgba(248, 113, 113, 0.4)',
   },
   filterTabText: {
     color: COLORS.textSecondary,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   activeFilterTabText: {
     color: COLORS.white,
   },
   listContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 100, // Cushion for FAB
+    paddingBottom: 100,
   },
   loaderContainer: {
     flex: 1,
@@ -288,7 +299,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '800',
     color: COLORS.textPrimary,
   },
   emptySubtext: {
@@ -305,11 +316,6 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.35,
-    shadowRadius: 12,
-    elevation: 6,
   },
   fabGradient: {
     flex: 1,
