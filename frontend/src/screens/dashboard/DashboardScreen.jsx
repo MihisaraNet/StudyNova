@@ -42,38 +42,46 @@ export default function DashboardScreen({ navigation }) {
     ? Math.round((completedTasksCount / tasks.length) * 100) : 0;
 
   const quickStats = [
-    { icon: 'book-outline',             label: 'Subjects',    value: subjects.length.toString(), color: COLORS.primary, onPress: () => navigation.navigate('Subjects') },
+    { icon: 'book-outline',             label: 'Subjects',    value: subjects.length.toString(), color: COLORS.primaryLight, onPress: () => navigation.navigate('Subjects') },
     { icon: 'checkmark-circle-outline', label: 'Active Tasks', value: pendingTasksCount.toString(), color: COLORS.warning, onPress: () => navigation.navigate('Tasks') },
     { icon: 'calendar-outline',         label: 'Sessions',    value: sessions.length.toString(), color: COLORS.success, onPress: () => navigation.navigate('Timetable') },
   ];
 
   const quickActions = [
-    { icon: 'add-circle',    label: 'Add Subject',   color: COLORS.primary,   onPress: () => navigation.navigate('Subjects',  { screen: 'AddSubject' }) },
-    { icon: 'clipboard',     label: 'New Task',       color: COLORS.warning,   onPress: () => navigation.navigate('Tasks',     { screen: 'AddTask' }) },
-    { icon: 'time',          label: 'Study Session',  color: COLORS.success,   onPress: () => navigation.navigate('Timetable', { screen: 'AddSession' }) },
-    { icon: 'bulb',          label: 'AI Suggestions', color: COLORS.secondary, onPress: () => navigation.navigate('AIStudySuggestion') },
-    { icon: 'timer-outline', label: 'Pomodoro Timer', color: '#A78BFA',        onPress: () => navigation.navigate('Timetable', { screen: 'Pomodoro' }) },
-    { icon: 'bar-chart',     label: 'My Progress',    color: '#34D399',        onPress: () => navigation.navigate('Progress') },
+    { icon: 'add-circle-outline', label: 'Add Subject',   color: COLORS.primaryLight, onPress: () => navigation.navigate('Subjects',  { screen: 'AddSubject' }) },
+    { icon: 'clipboard-outline',  label: 'New Task',       color: COLORS.warning,       onPress: () => navigation.navigate('Tasks',     { screen: 'AddTask' }) },
+    { icon: 'time-outline',       label: 'Study Session',  color: COLORS.success,       onPress: () => navigation.navigate('Timetable', { screen: 'AddSession' }) },
+    { icon: 'sparkles-outline',   label: 'AI Suggestions', color: COLORS.secondary,     onPress: () => navigation.navigate('AIStudySuggestion') },
+    { icon: 'timer-outline',      label: 'Pomodoro Timer', color: '#A78BFA',            onPress: () => navigation.navigate('Timetable', { screen: 'Pomodoro' }) },
+    { icon: 'bar-chart-outline',  label: 'My Progress',    color: '#34D399',            onPress: () => navigation.navigate('Progress') },
   ];
 
   return (
     <View style={styles.mainContainer}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      
+      {/* Deep space radial background */}
       <LinearGradient
-        colors={['#0F0C29', '#302B63', '#24243E']}
+        colors={COLORS.gradientDark}
         style={StyleSheet.absoluteFill}
-        start={{ x: 0.2, y: 0 }}
-        end={{ x: 0.8, y: 1 }}
+        start={{ x: 0.1, y: 0 }}
+        end={{ x: 0.9, y: 1 }}
       />
+      
+      {/* Dynamic light blobs */}
+      <View style={styles.blurBlob1} />
+      <View style={styles.blurBlob2} />
+
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
-        {/* Header */}
-        <LinearGradient
-          colors={COLORS.gradientPrimary}
-          style={styles.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
+        {/* ── Floating Frosted Header Card ── */}
+        <View style={[styles.headerCard, COLORS.glowIndigo]}>
+          <LinearGradient
+            colors={['rgba(108, 99, 255, 0.18)', 'rgba(255, 255, 255, 0.02)']}
+            style={StyleSheet.absoluteFill}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          />
           <View style={styles.headerTop}>
             <View>
               <Text style={styles.greeting}>Good {getGreeting()}, 👋</Text>
@@ -84,16 +92,16 @@ export default function DashboardScreen({ navigation }) {
               <Text style={styles.avatarText}>{user?.name?.[0]?.toUpperCase() ?? 'S'}</Text>
             </View>
           </View>
-        </LinearGradient>
+        </View>
 
         <View style={styles.body}>
 
-          {/* Quick Stats */}
+          {/* Quick Stats Grid */}
           <Text style={styles.sectionTitle}>Overview</Text>
           <View style={styles.statsGrid}>
             {quickStats.map((stat, i) => (
               <TouchableOpacity key={i} style={styles.statCard} onPress={stat.onPress} activeOpacity={0.7}>
-                <View style={[styles.statIcon, { backgroundColor: stat.color + '18' }]}>
+                <View style={[styles.statIcon, { backgroundColor: stat.color + '12' }]}>
                   <Ionicons name={stat.icon} size={22} color={stat.color} />
                 </View>
                 <Text style={styles.statValue}>{stat.value}</Text>
@@ -102,18 +110,19 @@ export default function DashboardScreen({ navigation }) {
             ))}
           </View>
 
-          {/* ── Live Productivity Card ── */}
+          {/* ── Premium Frosted Productivity Progress Card ── */}
           <TouchableOpacity
             style={styles.productivityCard}
             onPress={() => navigation.navigate('Progress')}
             activeOpacity={0.85}
           >
             <LinearGradient
-              colors={['rgba(108,99,255,0.25)', 'rgba(108,99,255,0.08)']}
+              colors={['rgba(255, 255, 255, 0.06)', 'rgba(255, 255, 255, 0.02)']}
               style={StyleSheet.absoluteFill}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             />
+            
             <View style={styles.prodRow}>
               <View style={styles.prodStat}>
                 <Text style={styles.prodNum}>{compRate}%</Text>
@@ -140,6 +149,19 @@ export default function DashboardScreen({ navigation }) {
                 <Text style={styles.prodLabel}>Pomodoros</Text>
               </View>
             </View>
+
+            {/* Glowing Horizontal Progress Bar */}
+            <View style={styles.progressContainer}>
+              <View style={styles.progressBarBg}>
+                <LinearGradient
+                  colors={COLORS.gradientPrimary}
+                  style={[styles.progressBarFill, { width: `${compRate}%` }]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                />
+              </View>
+            </View>
+
             <View style={styles.prodFooter}>
               <Text style={styles.prodFooterText}>View full analytics →</Text>
               {isRunning && (
@@ -151,12 +173,12 @@ export default function DashboardScreen({ navigation }) {
             </View>
           </TouchableOpacity>
 
-          {/* Quick Actions */}
+          {/* Quick Actions Grid */}
           <Text style={styles.sectionTitle}>Quick Actions</Text>
           <View style={styles.actionsGrid}>
             {quickActions.map((action, i) => (
               <TouchableOpacity key={i} style={styles.actionBtn} onPress={action.onPress} activeOpacity={0.8}>
-                <View style={[styles.actionIcon, { backgroundColor: action.color + '18' }]}>
+                <View style={[styles.actionIcon, { backgroundColor: action.color + '12' }]}>
                   <Ionicons name={action.icon} size={24} color={action.color} />
                 </View>
                 <Text style={styles.actionLabel}>{action.label}</Text>
@@ -180,42 +202,68 @@ function getGreeting() {
 const styles = StyleSheet.create({
   mainContainer: { flex: 1 },
   container:     { flex: 1 },
-  header: {
-    paddingTop: 56,
-    paddingBottom: 32,
-    paddingHorizontal: 24,
-    borderBottomLeftRadius: 28,
-    borderBottomRightRadius: 28,
+  
+  // Background Blobs
+  blurBlob1: {
+    position: 'absolute',
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: 'rgba(108, 99, 255, 0.12)',
+    top: 50,
+    right: -50,
   },
-  headerTop:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  greeting:     { fontSize: 14, color: 'rgba(255,255,255,0.8)', fontWeight: '500' },
-  userName:     { fontSize: 26, fontWeight: '800', color: COLORS.white, marginTop: 2 },
-  semester:     { fontSize: 13, color: 'rgba(255,255,255,0.7)', marginTop: 4 },
-  avatar: {
-    width: 48,
-    height: 48,
+  blurBlob2: {
+    position: 'absolute',
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: 'rgba(255, 101, 132, 0.06)',
+    bottom: 150,
+    left: -100,
+  },
+
+  // Floating Frosted Header Card
+  headerCard: {
+    marginTop: 60,
+    marginHorizontal: 20,
     borderRadius: 24,
-    backgroundColor: 'rgba(255,255,255,0.25)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+    overflow: 'hidden',
+    paddingVertical: 24,
+    paddingHorizontal: 20,
+  },
+  headerTop:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  greeting:     { fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: '600', letterSpacing: 0.3 },
+  userName:     { fontSize: 28, fontWeight: '900', color: COLORS.white, marginTop: 2, letterSpacing: -0.5 },
+  semester:     { fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 4, fontWeight: '500' },
+  avatar: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: 'rgba(255,255,255,0.06)',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.4)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.15)',
   },
   avatarText: { color: COLORS.white, fontSize: 20, fontWeight: '800' },
-  body:       { padding: 20 },
+  body:       { padding: 20, paddingTop: 8 },
 
-  sectionTitle: { fontSize: 15, fontWeight: '700', color: COLORS.textPrimary, marginBottom: 14, marginTop: 8 },
+  sectionTitle: { fontSize: 14, fontWeight: '800', color: COLORS.textPrimary, marginBottom: 14, marginTop: 12, letterSpacing: 0.8, textTransform: 'uppercase' },
 
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 16 },
   statCard: {
     flex: 1,
     minWidth: '28%',
-    backgroundColor: COLORS.surface,
-    borderRadius: 16,
-    padding: 16,
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    borderRadius: 18,
+    paddingVertical: 16,
+    paddingHorizontal: 12,
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: COLORS.borderLight,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   statIcon:  { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
   statValue: { fontSize: 22, fontWeight: '800', color: COLORS.textPrimary },
@@ -223,30 +271,47 @@ const styles = StyleSheet.create({
 
   // Productivity card
   productivityCard: {
-    borderRadius: 18,
-    padding: 18,
-    marginBottom: 20,
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 24,
     borderWidth: 1.5,
-    borderColor: 'rgba(108,99,255,0.3)',
+    borderColor: 'rgba(255, 255, 255, 0.08)',
     overflow: 'hidden',
   },
-  prodRow:     { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+  prodRow:     { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
   prodStat:    { flex: 1, alignItems: 'center' },
-  prodNum:     { fontSize: 20, fontWeight: '800', color: COLORS.textPrimary },
-  prodLabel:   { fontSize: 10, color: COLORS.textSecondary, marginTop: 2, fontWeight: '600' },
-  prodDivider: { width: 1, height: 32, backgroundColor: 'rgba(255,255,255,0.1)' },
+  prodNum:     { fontSize: 20, fontWeight: '900', color: COLORS.textPrimary },
+  prodLabel:   { fontSize: 10, color: COLORS.textSecondary, marginTop: 2, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5 },
+  prodDivider: { width: 1, height: 32, backgroundColor: 'rgba(255,255,255,0.08)' },
+  
+  // Progress Bar styles
+  progressContainer: {
+    marginBottom: 16,
+    paddingHorizontal: 4,
+  },
+  progressBarBg: {
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    borderRadius: 4,
+  },
+
   prodFooter:  { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  prodFooterText: { color: COLORS.primary, fontSize: 12, fontWeight: '700' },
+  prodFooterText: { color: COLORS.primaryLight, fontSize: 12, fontWeight: '700' },
   timerPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(76,175,130,0.15)',
+    backgroundColor: 'rgba(52,211,153,0.1)',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 20,
     gap: 5,
     borderWidth: 1,
-    borderColor: 'rgba(76,175,130,0.3)',
+    borderColor: 'rgba(52,211,153,0.2)',
   },
   timerDot:      { width: 6, height: 6, borderRadius: 3, backgroundColor: COLORS.success },
   timerPillText: { color: COLORS.success, fontSize: 11, fontWeight: '600' },
@@ -255,13 +320,14 @@ const styles = StyleSheet.create({
   actionBtn: {
     flex: 1,
     minWidth: '44%',
-    backgroundColor: COLORS.surface,
-    borderRadius: 14,
-    padding: 16,
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    borderRadius: 16,
+    paddingVertical: 18,
+    paddingHorizontal: 16,
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: COLORS.borderLight,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   actionIcon:  { width: 48, height: 48, borderRadius: 14, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
-  actionLabel: { fontSize: 12, fontWeight: '600', color: COLORS.textPrimary, textAlign: 'center' },
+  actionLabel: { fontSize: 12, fontWeight: '700', color: COLORS.textPrimary, textAlign: 'center' },
 });
