@@ -65,7 +65,6 @@ export default function AIStudySuggestionScreen() {
     if (!text) return null;
 
     const lines = text.split('\n');
-    let insideList = false;
 
     return lines.map((line, index) => {
       const cleanLine = line.trim();
@@ -191,16 +190,19 @@ export default function AIStudySuggestionScreen() {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <LinearGradient
-        colors={['#0F0C29', '#302B63', '#24243E']}
+        colors={COLORS.gradientDark}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.2, y: 0 }}
         end={{ x: 0.8, y: 1 }}
       />
+      
+      {/* Decorative Blob */}
+      <View style={styles.blurBlob} />
 
       {/* Header bar */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
+          <Ionicons name="arrow-back" size={22} color={COLORS.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>AI Study Suggestions</Text>
         <View style={{ width: 40 }} />
@@ -212,7 +214,7 @@ export default function AIStudySuggestionScreen() {
           <View style={styles.avatarGlowContainer}>
             <View style={styles.glowOuter} />
             <View style={styles.glowInner}>
-              <Ionicons name="hardware-chip-outline" size={44} color={COLORS.primaryLight} />
+              <Ionicons name="hardware-chip-outline" size={40} color={COLORS.primaryLight} />
             </View>
           </View>
           <Text style={styles.loaderTitle}>Analyzing Workload</Text>
@@ -231,7 +233,7 @@ export default function AIStudySuggestionScreen() {
             
             {/* Action button in scroll */}
             <TouchableOpacity
-              style={styles.regenerateBtn}
+              style={[styles.regenerateBtn, COLORS.glowIndigo]}
               onPress={fetchSuggestions}
               activeOpacity={0.8}
             >
@@ -241,7 +243,7 @@ export default function AIStudySuggestionScreen() {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Ionicons name="sparkles" size={18} color={COLORS.white} />
+                <Ionicons name="sparkles" size={16} color={COLORS.white} />
                 <Text style={styles.regenerateBtnText}>Refresh Study Recommendations</Text>
               </LinearGradient>
             </TouchableOpacity>
@@ -254,27 +256,40 @@ export default function AIStudySuggestionScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  blurBlob: {
+    position: 'absolute',
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: 'rgba(108, 99, 255, 0.08)',
+    top: 100,
+    right: -50,
+  },
   header: {
-    paddingHorizontal: 15,
-    paddingTop: 55,
-    paddingBottom: 15,
+    paddingHorizontal: 20,
+    paddingTop: 64,
+    paddingBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.borderLight,
+    borderBottomWidth: 1.5,
+    borderBottomColor: 'rgba(255, 255, 255, 0.06)',
   },
   backBtn: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
   },
   headerTitle: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 20,
+    fontWeight: '850',
     color: COLORS.textPrimary,
+    letterSpacing: -0.5,
   },
   loaderContainer: {
     flex: 1,
@@ -295,8 +310,12 @@ const styles = StyleSheet.create({
     height: 90,
     borderRadius: 45,
     backgroundColor: COLORS.primary,
-    opacity: 0.15,
-    transform: [{ scale: 1.15 }],
+    opacity: 0.25,
+    transform: [{ scale: 1.2 }],
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 20,
   },
   glowInner: {
     width: 68,
@@ -318,7 +337,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: COLORS.textSecondary,
     textAlign: 'center',
-    height: 20, // Keep height persistent to prevent jumping layout
+    height: 20,
+    fontWeight: '600',
   },
   scrollContent: {
     padding: 20,
@@ -326,11 +346,12 @@ const styles = StyleSheet.create({
   },
   mdH1: {
     fontSize: 24,
-    fontWeight: '800',
+    fontWeight: '900',
     color: COLORS.textPrimary,
     marginTop: 10,
     marginBottom: 16,
     lineHeight: 30,
+    letterSpacing: -0.5,
   },
   h2Container: {
     marginTop: 22,
@@ -338,7 +359,7 @@ const styles = StyleSheet.create({
   },
   mdH2: {
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: '850',
     color: COLORS.primaryLight,
     lineHeight: 24,
   },
@@ -361,6 +382,7 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
     lineHeight: 22,
     marginBottom: 10,
+    fontWeight: '500',
   },
   boldText: {
     fontWeight: '700',
@@ -377,14 +399,16 @@ const styles = StyleSheet.create({
   },
   mdBlockquote: {
     flexDirection: 'row',
-    backgroundColor: COLORS.surfaceAlt,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
     borderLeftWidth: 4,
     borderLeftColor: COLORS.warning,
-    borderRadius: 12,
-    padding: 14,
+    borderRadius: 16,
+    padding: 16,
     marginVertical: 14,
     alignItems: 'flex-start',
     gap: 10,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
   },
   quoteIcon: {
     marginTop: 2,
@@ -392,7 +416,7 @@ const styles = StyleSheet.create({
   mdBlockquoteText: {
     flex: 1,
     fontSize: 13,
-    color: COLORS.warningLight,
+    color: COLORS.textSecondary,
     lineHeight: 20,
     fontWeight: '500',
   },
@@ -413,6 +437,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.textPrimary,
     lineHeight: 22,
+    fontWeight: '500',
   },
   numberedItemRow: {
     flexDirection: 'row',
@@ -439,6 +464,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.textPrimary,
     lineHeight: 22,
+    fontWeight: '500',
   },
   regenerateBtn: {
     marginTop: 36,
@@ -456,6 +482,6 @@ const styles = StyleSheet.create({
   regenerateBtnText: {
     color: COLORS.white,
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '800',
   },
 });

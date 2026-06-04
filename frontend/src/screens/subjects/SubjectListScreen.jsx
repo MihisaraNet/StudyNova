@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Alert, SafeAreaView, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -39,27 +39,26 @@ export default function SubjectListScreen() {
     setShowDeleteAlert(true);
   };
 
-  const renderHeader = () => (
-    <View style={styles.headerContainer}>
-      <Text style={styles.headerTitle}>My Subjects</Text>
-    </View>
-  );
-
-
-
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#0F0C29', '#302B63', '#24243E']}
+        colors={COLORS.gradientDark}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.2, y: 0 }}
         end={{ x: 0.8, y: 1 }}
       />
-      {renderHeader()}
+      
+      {/* Decorative Blob */}
+      <View style={styles.blurBlob} />
+
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerTitle}>Subjects</Text>
+        <Text style={styles.headerSubtitle}>Manage your academic courses and subject directory</Text>
+      </View>
       
       {isLoading && !refreshing ? (
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
+          <ActivityIndicator size="large" color={COLORS.primaryLight} />
         </View>
       ) : subjects.length === 0 ? (
         <EmptyState
@@ -82,11 +81,20 @@ export default function SubjectListScreen() {
         />
       )}
 
+      {/* Glowing FAB Button */}
       <TouchableOpacity
-        style={styles.fab}
+        style={[styles.fab, COLORS.glowIndigo]}
         onPress={() => navigation.navigate('AddSubject')}
+        activeOpacity={0.85}
       >
-        <Ionicons name="add" size={24} color="#FFF" />
+        <LinearGradient
+          colors={COLORS.gradientPrimary}
+          style={styles.fabGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <Ionicons name="add" size={26} color="#FFF" />
+        </LinearGradient>
       </TouchableOpacity>
 
       {/* Custom Destructive Alert Popup */}
@@ -113,15 +121,31 @@ export default function SubjectListScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  blurBlob: {
+    position: 'absolute',
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: 'rgba(108, 99, 255, 0.08)',
+    top: 50,
+    right: -60,
+  },
   headerContainer: {
     paddingHorizontal: 20,
-    paddingTop: 40,
-    paddingBottom: 10,
+    paddingTop: 64,
+    paddingBottom: 16,
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: '950',
     color: COLORS.textPrimary,
+    letterSpacing: -0.5,
+  },
+  headerSubtitle: {
+    fontSize: 13,
+    color: COLORS.textSecondary,
+    marginTop: 4,
+    fontWeight: '500',
   },
   centerContainer: {
     flex: 1,
@@ -132,15 +156,6 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 100,
   },
-  sectionHeader: {
-    marginBottom: 12,
-    marginTop: 8,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: COLORS.primary,
-  },
   fab: {
     position: 'absolute',
     bottom: 24,
@@ -148,13 +163,11 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: COLORS.primary,
+  },
+  fabGradient: {
+    flex: 1,
+    borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
   },
 });
