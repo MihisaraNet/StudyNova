@@ -36,12 +36,7 @@ function AuthInput({ label, placeholder, value, onChangeText, secureEntry, keybo
     <View style={inputStyles.wrap}>
       <Text style={inputStyles.label}>{label}</Text>
       <View style={[inputStyles.row, focused && inputStyles.focused, error && inputStyles.errored]}>
-        <Ionicons name={icon} size={17} color={focused ? '#6C63FF' : 'rgba(255,255,255,0.35)'} style={{ marginRight: 10 }} />
-        <Text
-          style={[inputStyles.input, { color: value ? '#fff' : 'rgba(255,255,255,0.3)' }]}
-          numberOfLines={1}
-        />
-        {/* actual input behind */}
+        <Ionicons name={icon} size={17} color={focused ? COLORS.primaryLight : 'rgba(255,255,255,0.35)'} style={{ marginRight: 10 }} />
         <TextInputNative
           style={inputStyles.realInput}
           placeholder={placeholder}
@@ -73,22 +68,20 @@ function AuthInput({ label, placeholder, value, onChangeText, secureEntry, keybo
 import { TextInput as TextInputNative } from 'react-native';
 
 const inputStyles = StyleSheet.create({
-  wrap:      { marginBottom: 14 },
-  label:     { fontSize: 12, fontWeight: '600', color: 'rgba(255,255,255,0.55)', marginBottom: 6, letterSpacing: 0.5 },
+  wrap:      { marginBottom: 16 },
+  label:     { fontSize: 11, fontWeight: '700', color: COLORS.textSecondary, marginBottom: 6, letterSpacing: 0.8 },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.07)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.12)',
+    borderColor: 'rgba(255,255,255,0.08)',
     borderRadius: 14,
     paddingHorizontal: 16,
-    paddingVertical: 0,
     height: 54,
   },
-  focused:    { borderColor: '#6C63FF', backgroundColor: 'rgba(108,99,255,0.12)' },
-  errored:    { borderColor: '#FF5C6A' },
-  input:      { display: 'none' },
+  focused:    { borderColor: COLORS.primaryLight, backgroundColor: 'rgba(108,99,255,0.08)' },
+  errored:    { borderColor: COLORS.error },
   realInput: {
     flex: 1,
     fontSize: 15,
@@ -96,7 +89,7 @@ const inputStyles = StyleSheet.create({
     height: '100%',
     fontWeight: '500',
   },
-  errorText:  { fontSize: 11, color: '#FF5C6A', marginTop: 4 },
+  errorText:  { fontSize: 11, color: COLORS.error, marginTop: 4 },
 });
 
 // ─── Main Screen ──────────────────────────────────────────────────────────────
@@ -127,15 +120,15 @@ export default function LoginScreen({ navigation }) {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 
-      {/* Dark gradient background */}
+      {/* Dark dynamic background */}
       <LinearGradient
-        colors={['#0F0C29', '#302B63', '#24243E']}
+        colors={COLORS.gradientDark}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.2, y: 0 }}
         end={{ x: 0.8, y: 1 }}
       />
 
-      {/* Decorative blobs */}
+      {/* Decorative glass blobs */}
       <View style={styles.blobTL} />
       <View style={styles.blobBR} />
 
@@ -150,34 +143,34 @@ export default function LoginScreen({ navigation }) {
         >
           {/* Logo + Title */}
           <View style={styles.heroSection}>
-            <View style={styles.logoBox}>
+            <View style={[styles.logoBox, COLORS.glowIndigo]}>
               <LinearGradient
-                colors={['#6C63FF', '#FF6584']}
+                colors={COLORS.gradientPrimary}
                 style={styles.logoGrad}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Text style={{ fontSize: 30 }}>📚</Text>
+                <Text style={{ fontSize: 32 }}>📚</Text>
               </LinearGradient>
             </View>
-            <Text style={styles.heroTitle}>Get Started Now</Text>
+            <Text style={styles.heroTitle}>StudyNova</Text>
             <Text style={styles.heroSub}>
-              Sign in to manage your studies, track assignments and boost your GPA.
+              Sign in to manage your studies, track assignments, and boost your GPA.
             </Text>
           </View>
 
-          {/* Tab Switcher */}
-          <View style={styles.tabBar}>
-            <TouchableOpacity style={[styles.tabBtn, styles.tabActive]}>
-              <Text style={styles.tabTextActive}>Log In</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.tabBtn} onPress={goRegister}>
-              <Text style={styles.tabText}>Sign Up</Text>
-            </TouchableOpacity>
-          </View>
+          {/* Form Card (Glassmorphic) */}
+          <View style={styles.formCard}>
+            {/* Tab Switcher */}
+            <View style={styles.tabBar}>
+              <TouchableOpacity style={[styles.tabBtn, styles.tabActive]}>
+                <Text style={styles.tabTextActive}>Log In</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.tabBtn} onPress={goRegister}>
+                <Text style={styles.tabText}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
 
-          {/* Form */}
-          <View style={styles.form}>
             <Controller
               control={control}
               name="email"
@@ -222,11 +215,11 @@ export default function LoginScreen({ navigation }) {
             <TouchableOpacity
               onPress={handleSubmit(onSubmit)}
               disabled={loading}
-              style={styles.btnWrap}
+              style={[styles.btnWrap, !loading && COLORS.glowIndigo]}
               activeOpacity={0.85}
             >
               <LinearGradient
-                colors={loading ? ['#444', '#444'] : ['#6C63FF', '#8B85FF']}
+                colors={loading ? ['#3F3F46', '#27272A'] : COLORS.gradientPrimary}
                 style={styles.btn}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
@@ -246,14 +239,14 @@ export default function LoginScreen({ navigation }) {
               <View style={styles.dividerLine} />
             </View>
 
-            {/* Social row (placeholder) */}
+            {/* Social row */}
             <View style={styles.socialRow}>
               {[
                 { icon: 'logo-google', label: 'Google' },
                 { icon: 'logo-apple',  label: 'Apple' },
               ].map((s) => (
                 <TouchableOpacity key={s.label} style={styles.socialBtn} activeOpacity={0.8}>
-                  <Ionicons name={s.icon} size={20} color="#fff" />
+                  <Ionicons name={s.icon} size={18} color="#fff" />
                   <Text style={styles.socialText}>{s.label}</Text>
                 </TouchableOpacity>
               ))}
@@ -277,67 +270,78 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   scroll: {
     flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingTop: 70,
+    paddingHorizontal: 20,
+    paddingTop: 60,
     paddingBottom: 40,
   },
   blobTL: {
     position: 'absolute',
-    width: 260,
-    height: 260,
-    borderRadius: 130,
-    backgroundColor: 'rgba(108,99,255,0.15)',
-    top: -80,
-    left: -80,
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: 'rgba(108,99,255,0.12)',
+    top: -100,
+    left: -100,
   },
   blobBR: {
     position: 'absolute',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    backgroundColor: 'rgba(255,101,132,0.1)',
-    bottom: 60,
-    right: -60,
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: 'rgba(255,101,132,0.08)',
+    bottom: 40,
+    right: -80,
   },
 
   // Hero
-  heroSection: { alignItems: 'center', marginBottom: 32 },
-  logoBox:     { marginBottom: 20 },
+  heroSection: { alignItems: 'center', marginBottom: 24 },
+  logoBox:     { marginBottom: 16 },
   logoGrad: {
     width: 72,
     height: 72,
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#6C63FF',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.5,
-    shadowRadius: 16,
-    elevation: 12,
   },
   heroTitle: {
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: '900',
     color: '#FFFFFF',
     textAlign: 'center',
     letterSpacing: -0.5,
-    marginBottom: 10,
+    marginBottom: 6,
   },
   heroSub: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.45)',
+    fontSize: 13,
+    color: COLORS.textSecondary,
     textAlign: 'center',
-    lineHeight: 21,
-    paddingHorizontal: 12,
+    lineHeight: 19,
+    paddingHorizontal: 20,
+  },
+
+  // Frosted Card Wrapper
+  formCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderRadius: 24,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
+    elevation: 8,
   },
 
   // Tab switcher
   tabBar: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255,255,255,0.07)',
+    backgroundColor: 'rgba(255,255,255,0.04)',
     borderRadius: 16,
     padding: 4,
-    marginBottom: 28,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   tabBtn: {
     flex: 1,
@@ -346,30 +350,29 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   tabActive: {
-    backgroundColor: '#6C63FF',
-    shadowColor: '#6C63FF',
+    backgroundColor: COLORS.primary,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
+    shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 6,
+    elevation: 4,
   },
-  tabText:       { color: 'rgba(255,255,255,0.45)', fontWeight: '700', fontSize: 14 },
-  tabTextActive: { color: '#FFFFFF', fontWeight: '800', fontSize: 14 },
+  tabText:       { color: 'rgba(255,255,255,0.45)', fontWeight: '700', fontSize: 13 },
+  tabTextActive: { color: '#FFFFFF', fontWeight: '800', fontSize: 13 },
 
   // Form
-  form: {},
   forgotWrap: { alignSelf: 'flex-end', marginBottom: 24, marginTop: -4 },
-  forgotText: { color: '#6C63FF', fontSize: 13, fontWeight: '600' },
+  forgotText: { color: COLORS.primaryLight, fontSize: 13, fontWeight: '600' },
 
   // Button
-  btnWrap: { borderRadius: 14, overflow: 'hidden', marginBottom: 28 },
+  btnWrap: { borderRadius: 14, overflow: 'hidden', marginBottom: 24 },
   btn: {
-    paddingVertical: 17,
+    paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 14,
   },
-  btnText: { color: '#FFFFFF', fontSize: 16, fontWeight: '800', letterSpacing: 0.3 },
+  btnText: { color: '#FFFFFF', fontSize: 15, fontWeight: '800', letterSpacing: 0.5 },
 
   // Divider
   divider: {
@@ -378,27 +381,27 @@ const styles = StyleSheet.create({
     gap: 10,
     marginBottom: 20,
   },
-  dividerLine: { flex: 1, height: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
-  dividerText: { color: 'rgba(255,255,255,0.3)', fontSize: 12, fontWeight: '600' },
+  dividerLine: { flex: 1, height: 1, backgroundColor: 'rgba(255,255,255,0.08)' },
+  dividerText: { color: 'rgba(255,255,255,0.3)', fontSize: 11, fontWeight: '600' },
 
   // Social
-  socialRow: { flexDirection: 'row', gap: 12, marginBottom: 32 },
+  socialRow: { flexDirection: 'row', gap: 12, marginBottom: 24 },
   socialBtn: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: 'rgba(255,255,255,0.07)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.12)',
+    borderColor: 'rgba(255,255,255,0.08)',
     borderRadius: 14,
-    paddingVertical: 14,
+    paddingVertical: 12,
   },
-  socialText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+  socialText: { color: '#fff', fontSize: 13, fontWeight: '700' },
 
   // Register row
   registerRow: { flexDirection: 'row', justifyContent: 'center' },
-  registerText: { color: 'rgba(255,255,255,0.4)', fontSize: 14 },
-  registerLink: { color: '#6C63FF', fontSize: 14, fontWeight: '800' },
+  registerText: { color: 'rgba(255,255,255,0.4)', fontSize: 13 },
+  registerLink: { color: COLORS.primaryLight, fontSize: 13, fontWeight: '800' },
 });
