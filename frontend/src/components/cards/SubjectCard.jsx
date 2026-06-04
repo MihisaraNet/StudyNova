@@ -13,33 +13,30 @@ export default function SubjectCard({ subject, onEdit, onDelete }) {
         </View>
         <View style={styles.actions}>
           <TouchableOpacity onPress={() => onEdit(subject)} style={styles.actionButton}>
-            <Ionicons name="pencil" size={20} color={COLORS.primary} />
+            <Ionicons name="pencil" size={18} color={COLORS.primaryLight} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onDelete(subject.id)} style={styles.actionButton}>
-            <Ionicons name="trash" size={20} color={COLORS.error} />
+            <Ionicons name="trash" size={18} color={COLORS.error} />
           </TouchableOpacity>
         </View>
       </View>
-      
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#1E1B4B',
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
     borderRadius: 16,
-    padding: 16,
+    padding: 18,
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 16,
+    alignItems: 'center',
   },
   titleContainer: {
     flex: 1,
@@ -52,9 +49,10 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   code: {
-    fontSize: 14,
-    color: COLORS.primary,
-    fontWeight: '600',
+    fontSize: 13,
+    color: COLORS.primaryLight,
+    fontWeight: '750',
+    letterSpacing: 0.8,
   },
   actions: {
     flexDirection: 'row',
@@ -62,25 +60,11 @@ const styles = StyleSheet.create({
   actionButton: {
     padding: 8,
     marginLeft: 8,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: 8,
-  },
-  details: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 16,
-  },
-  detailItem: {
-    flexDirection: 'row',
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 10,
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-  },
-  detailText: {
-    color: COLORS.textSecondary,
-    fontSize: 12,
-    marginLeft: 6,
+    justifyContent: 'center',
   },
 });
