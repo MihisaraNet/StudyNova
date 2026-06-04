@@ -67,7 +67,7 @@ export default function TaskCard({ task, onToggleComplete, onPress }) {
           onPress={onToggleComplete}
           activeOpacity={0.7}
         >
-          {isCompleted && <Ionicons name="checkmark" size={14} color={COLORS.white} />}
+          {isCompleted && <Ionicons name="checkmark" size={12} color={COLORS.white} />}
         </TouchableOpacity>
 
         {/* Text Details */}
@@ -123,10 +123,10 @@ export default function TaskCard({ task, onToggleComplete, onPress }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
     borderRadius: 16,
     borderWidth: 1.5,
-    borderColor: COLORS.borderLight,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
     borderLeftWidth: 5,
     marginBottom: 12,
     paddingVertical: 14,
@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   completedCard: {
-    opacity: 0.6,
-    borderColor: 'transparent',
+    opacity: 0.45,
+    borderColor: 'rgba(255, 255, 255, 0.02)',
   },
   cardContent: {
     flexDirection: 'row',
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: 11,
     borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.3)',
+    borderColor: 'rgba(255,255,255,0.22)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -177,26 +177,30 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   subjectBadge: {
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    borderRadius: 6,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.08)',
     paddingVertical: 2,
-    paddingHorizontal: 6,
+    paddingHorizontal: 8,
     maxWidth: 120,
   },
   subjectText: {
     fontSize: 10,
-    fontWeight: '600',
+    fontWeight: '700',
     color: COLORS.textSecondary,
   },
   hoursBadge: {
-    backgroundColor: COLORS.surfaceAlt,
-    borderRadius: 6,
+    backgroundColor: 'rgba(108, 99, 255, 0.12)',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(108, 99, 255, 0.2)',
     paddingVertical: 2,
-    paddingHorizontal: 6,
+    paddingHorizontal: 8,
   },
   hoursText: {
     fontSize: 10,
-    fontWeight: '600',
+    fontWeight: '700',
     color: COLORS.primaryLight,
   },
   dueArea: {
@@ -206,7 +210,7 @@ const styles = StyleSheet.create({
   },
   dueText: {
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: '700',
     color: COLORS.textSecondary,
   },
   overdueText: {
