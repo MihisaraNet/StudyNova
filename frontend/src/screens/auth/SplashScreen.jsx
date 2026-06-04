@@ -59,15 +59,15 @@ export default function SplashScreen() {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 
-      {/* Full-screen dark gradient */}
+      {/* Full-screen dark space gradient */}
       <LinearGradient
-        colors={['#0F0C29', '#302B63', '#24243E']}
+        colors={COLORS.gradientDark}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.2, y: 0 }}
         end={{ x: 0.8, y: 1 }}
       />
 
-      {/* Decorative circles */}
+      {/* Decorative blobs */}
       <View style={[styles.circle, styles.circleTop]} />
       <View style={[styles.circle, styles.circleBottom]} />
 
@@ -79,7 +79,7 @@ export default function SplashScreen() {
         ]}
       >
         <LinearGradient
-          colors={['#6C63FF', '#FF6584']}
+          colors={COLORS.gradientPrimary}
           style={styles.logoGradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -98,8 +98,10 @@ export default function SplashScreen() {
           alignItems: 'center',
         }}
       >
-        <Text style={styles.appName}>Study</Text>
-        <Text style={styles.appNameAccent}>Nova</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.appName}>Study</Text>
+          <Text style={styles.appNameAccent}>Nova</Text>
+        </View>
         <Text style={styles.tagline}>Your academic success companion</Text>
       </Animated.View>
 
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
   circle: {
     position: 'absolute',
     borderRadius: 999,
-    backgroundColor: 'rgba(108,99,255,0.12)',
+    backgroundColor: 'rgba(108,99,255,0.08)',
   },
   circleTop: {
     width: 320,
@@ -138,69 +140,71 @@ const styles = StyleSheet.create({
     height: 240,
     bottom: -60,
     left: -60,
-    backgroundColor: 'rgba(255,101,132,0.08)',
+    backgroundColor: 'rgba(255,101,132,0.06)',
   },
   logoWrap: {
-    marginBottom: 32,
+    marginBottom: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
   logoGradient: {
-    width: 110,
-    height: 110,
-    borderRadius: 32,
+    width: 100,
+    height: 100,
+    borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#6C63FF',
     shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.5,
-    shadowRadius: 20,
+    shadowOpacity: 0.45,
+    shadowRadius: 18,
     elevation: 16,
   },
   glowRing: {
     position: 'absolute',
-    width: 130,
-    height: 130,
-    borderRadius: 40,
+    width: 120,
+    height: 120,
+    borderRadius: 38,
     borderWidth: 1.5,
-    borderColor: 'rgba(108,99,255,0.35)',
+    borderColor: 'rgba(108,99,255,0.3)',
   },
-  logoEmoji: { fontSize: 52 },
+  logoEmoji: { fontSize: 44 },
   appName: {
-    fontSize: 38,
-    fontWeight: '900',
+    fontSize: 34,
+    fontWeight: '950',
     color: '#FFFFFF',
     letterSpacing: -0.5,
   },
   appNameAccent: {
-    fontSize: 38,
-    fontWeight: '900',
-    color: '#6C63FF',
+    fontSize: 34,
+    fontWeight: '950',
+    color: COLORS.primaryLight,
     letterSpacing: -0.5,
-    marginTop: -6,
+    marginLeft: 2,
   },
   tagline: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.5)',
-    marginTop: 10,
+    fontSize: 13,
+    color: COLORS.textSecondary,
+    marginTop: 8,
     letterSpacing: 0.3,
+    fontWeight: '600',
   },
   dotsRow: {
     flexDirection: 'row',
     gap: 8,
-    marginTop: 56,
+    marginTop: 48,
   },
   dot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#6C63FF',
+    backgroundColor: COLORS.primaryLight,
   },
   versionText: {
     position: 'absolute',
     bottom: 48,
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.2)',
-    fontWeight: '500',
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.18)',
+    fontWeight: '700',
+    letterSpacing: 1,
   },
 });
