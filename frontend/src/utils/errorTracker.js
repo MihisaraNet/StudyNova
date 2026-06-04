@@ -1,4 +1,4 @@
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   // Capture synchronous/compilation/runtime script errors
   window.addEventListener('error', function(event) {
     console.error('Captured global error:', event.error || event.message);
