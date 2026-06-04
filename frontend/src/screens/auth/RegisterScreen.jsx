@@ -17,7 +17,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { COLORS } from '../../constants/colors';
-
 import useAuthStore from '../../store/authStore';
 
 const schema = yup.object({
@@ -38,7 +37,7 @@ function DarkInput({ label, placeholder, value, onChangeText, secureEntry, keybo
     <View style={inputSt.wrap}>
       <Text style={inputSt.label}>{label}</Text>
       <View style={[inputSt.row, focused && inputSt.focused, error && inputSt.errored]}>
-        <Ionicons name={icon} size={16} color={focused ? '#6C63FF' : 'rgba(255,255,255,0.3)'} style={{ marginRight: 10 }} />
+        <Ionicons name={icon} size={16} color={focused ? COLORS.primaryLight : 'rgba(255,255,255,0.3)'} style={{ marginRight: 10 }} />
         <TextInput
           style={inputSt.input}
           placeholder={placeholder}
@@ -64,19 +63,19 @@ function DarkInput({ label, placeholder, value, onChangeText, secureEntry, keybo
 
 const inputSt = StyleSheet.create({
   wrap:    { marginBottom: 12 },
-  label:   { fontSize: 11, fontWeight: '700', color: 'rgba(255,255,255,0.45)', marginBottom: 6, letterSpacing: 0.8, textTransform: 'uppercase' },
+  label:   { fontSize: 11, fontWeight: '700', color: COLORS.textSecondary, marginBottom: 6, letterSpacing: 0.8, textTransform: 'uppercase' },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.1)',
+    borderColor: 'rgba(255,255,255,0.08)',
     borderRadius: 14,
     paddingHorizontal: 16,
     height: 52,
   },
-  focused: { borderColor: '#6C63FF', backgroundColor: 'rgba(108,99,255,0.1)' },
-  errored: { borderColor: '#FF5C6A' },
+  focused: { borderColor: COLORS.primaryLight, backgroundColor: 'rgba(108,99,255,0.08)' },
+  errored: { borderColor: COLORS.error },
   input: {
     flex: 1,
     fontSize: 15,
@@ -84,44 +83,7 @@ const inputSt = StyleSheet.create({
     fontWeight: '500',
     height: '100%',
   },
-  error: { fontSize: 11, color: '#FF5C6A', marginTop: 4 },
-});
-
-
-
-const semSt = StyleSheet.create({
-  wrap: { marginBottom: 12 },
-  btn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 14,
-    paddingHorizontal: 16,
-    height: 52,
-  },
-  val:  { flex: 1, fontSize: 15, color: 'rgba(255,255,255,0.7)', fontWeight: '500' },
-  dropdown: {
-    backgroundColor: '#1E1B3A',
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
-    marginTop: 4,
-    overflow: 'hidden',
-  },
-  option: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 18,
-    paddingVertical: 13,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.06)',
-  },
-  optionActive:     { backgroundColor: 'rgba(108,99,255,0.15)' },
-  optionText:       { fontSize: 14, color: 'rgba(255,255,255,0.6)', fontWeight: '500' },
-  optionTextActive: { color: '#6C63FF', fontWeight: '700' },
+  error: { fontSize: 11, color: COLORS.error, marginTop: 4 },
 });
 
 // ─── Main Screen ──────────────────────────────────────────────────────────────
@@ -167,7 +129,7 @@ export default function RegisterScreen({ navigation }) {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <LinearGradient
-        colors={['#0F0C29', '#302B63', '#24243E']}
+        colors={COLORS.gradientDark}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.2, y: 0 }}
         end={{ x: 0.8, y: 1 }}
@@ -196,18 +158,18 @@ export default function RegisterScreen({ navigation }) {
             </Text>
           </View>
 
-          {/* Tab Switcher */}
-          <View style={styles.tabBar}>
-            <TouchableOpacity style={styles.tabBtn} onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.tabText}>Log In</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.tabBtn, styles.tabActive]}>
-              <Text style={styles.tabTextActive}>Sign Up</Text>
-            </TouchableOpacity>
-          </View>
+          {/* Form Card (Glassmorphic) */}
+          <View style={styles.formCard}>
+            {/* Tab Switcher */}
+            <View style={styles.tabBar}>
+              <TouchableOpacity style={styles.tabBtn} onPress={() => navigation.navigate('Login')}>
+                <Text style={styles.tabText}>Log In</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.tabBtn, styles.tabActive]}>
+                <Text style={styles.tabTextActive}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
 
-          {/* Form */}
-          <View style={styles.form}>
             <Controller
               control={control}
               name="name"
@@ -276,11 +238,11 @@ export default function RegisterScreen({ navigation }) {
             <TouchableOpacity
               onPress={handleSubmit(onSubmit, onInvalid)}
               disabled={loading}
-              style={styles.btnWrap}
+              style={[styles.btnWrap, !loading && COLORS.glowIndigo]}
               activeOpacity={0.85}
             >
               <LinearGradient
-                colors={loading ? ['#444', '#444'] : ['#6C63FF', '#8B85FF']}
+                colors={loading ? ['#3F3F46', '#27272A'] : COLORS.gradientPrimary}
                 style={styles.btn}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
@@ -314,72 +276,86 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   scroll: {
     flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingTop: 60,
+    paddingHorizontal: 20,
+    paddingTop: 50,
     paddingBottom: 48,
   },
   blobTR: {
     position: 'absolute',
-    width: 220,
-    height: 220,
-    borderRadius: 110,
+    width: 250,
+    height: 250,
+    borderRadius: 125,
     backgroundColor: 'rgba(108,99,255,0.12)',
     top: -50,
     right: -60,
   },
   blobBL: {
     position: 'absolute',
-    width: 180,
-    height: 180,
-    borderRadius: 90,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
     backgroundColor: 'rgba(255,101,132,0.08)',
     bottom: 80,
     left: -50,
   },
-  backBtn:   { marginBottom: 28 },
+  backBtn:   { marginBottom: 20 },
   backCircle: {
     width: 40,
     height: 40,
     borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.08)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  hero:      { marginBottom: 28 },
-  heroTitle: { fontSize: 34, fontWeight: '900', color: '#FFFFFF', letterSpacing: -0.5, marginBottom: 8 },
-  heroSub:   { fontSize: 14, color: 'rgba(255,255,255,0.4)', lineHeight: 21 },
+  hero:      { marginBottom: 24, paddingLeft: 4 },
+  heroTitle: { fontSize: 32, fontWeight: '900', color: '#FFFFFF', letterSpacing: -0.5, marginBottom: 8 },
+  heroSub:   { fontSize: 13, color: COLORS.textSecondary, lineHeight: 19 },
 
-  // Tab
+  // Frosted Card Wrapper
+  formCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderRadius: 24,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
+    elevation: 8,
+  },
+
+  // Tab switcher
   tabBar: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255,255,255,0.07)',
+    backgroundColor: 'rgba(255,255,255,0.04)',
     borderRadius: 16,
     padding: 4,
-    marginBottom: 28,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   tabBtn:        { flex: 1, paddingVertical: 12, alignItems: 'center', borderRadius: 12 },
   tabActive: {
-    backgroundColor: '#6C63FF',
-    shadowColor: '#6C63FF',
+    backgroundColor: COLORS.primary,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
+    shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 6,
+    elevation: 4,
   },
-  tabText:       { color: 'rgba(255,255,255,0.4)', fontWeight: '700', fontSize: 14 },
-  tabTextActive: { color: '#FFFFFF', fontWeight: '800', fontSize: 14 },
-
-  form: {},
+  tabText:       { color: 'rgba(255,255,255,0.4)', fontWeight: '700', fontSize: 13 },
+  tabTextActive: { color: '#FFFFFF', fontWeight: '800', fontSize: 13 },
 
   btnWrap: { borderRadius: 14, overflow: 'hidden', marginTop: 8, marginBottom: 16 },
-  btn:     { paddingVertical: 17, alignItems: 'center', borderRadius: 14 },
-  btnText: { color: '#FFFFFF', fontSize: 16, fontWeight: '800', letterSpacing: 0.3 },
+  btn:     { paddingVertical: 16, alignItems: 'center', borderRadius: 14 },
+  btnText: { color: '#FFFFFF', fontSize: 15, fontWeight: '800', letterSpacing: 0.5 },
 
-  termsText: { color: 'rgba(255,255,255,0.3)', fontSize: 12, textAlign: 'center', lineHeight: 18, marginBottom: 20 },
-  termsLink: { color: '#6C63FF', fontWeight: '600' },
+  termsText: { color: 'rgba(255,255,255,0.3)', fontSize: 11, textAlign: 'center', lineHeight: 17, marginBottom: 20 },
+  termsLink: { color: COLORS.primaryLight, fontWeight: '600' },
   loginRow:  { flexDirection: 'row', justifyContent: 'center' },
-  loginText: { color: 'rgba(255,255,255,0.4)', fontSize: 14 },
-  loginLink: { color: '#6C63FF', fontSize: 14, fontWeight: '800' },
+  loginText: { color: 'rgba(255,255,255,0.4)', fontSize: 13 },
+  loginLink: { color: COLORS.primaryLight, fontSize: 13, fontWeight: '800' },
 });
