@@ -38,8 +38,8 @@ function totalStudyMinutes(sessions) {
 // ─── Stat Card ────────────────────────────────────────────────────────────────
 function StatCard({ icon, label, value, color, sub }) {
   return (
-    <View style={[styles.statCard, { borderColor: color + '30' }]}>
-      <View style={[styles.statIcon, { backgroundColor: color + '18' }]}>
+    <View style={[styles.statCard, { borderColor: 'rgba(255,255,255,0.06)' }]}>
+      <View style={[styles.statIcon, { backgroundColor: color + '12' }]}>
         <Ionicons name={icon} size={20} color={color} />
       </View>
       <Text style={styles.statValue}>{value}</Text>
@@ -91,14 +91,14 @@ export default function AnalyticsScreen({ navigation }) {
       }
     });
 
-    const palette = [COLORS.primary, COLORS.success, COLORS.secondary, COLORS.warning, '#A78BFA', '#34D399'];
+    const palette = [COLORS.primaryLight, COLORS.success, COLORS.secondary, COLORS.warning, '#A78BFA', '#34D399'];
     return Object.values(subjectHoursMap).map((item, i) => ({
       value:          parseFloat((item.mins / 60).toFixed(1)),
       label:          item.label.length > 8 ? item.label.substring(0, 7) + '…' : item.label,
       frontColor:     palette[i % palette.length],
       gradientColor:  palette[i % palette.length] + '60',
       topLabelComponent: () => (
-        <Text style={{ color: COLORS.textSecondary, fontSize: 9, marginBottom: 2 }}>
+        <Text style={{ color: COLORS.textSecondary, fontSize: 9, marginBottom: 2, fontWeight: '750' }}>
           {parseFloat((item.mins / 60).toFixed(1))}h
         </Text>
       ),
@@ -135,25 +135,29 @@ export default function AnalyticsScreen({ navigation }) {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <LinearGradient
-        colors={['#0F0C29', '#302B63', '#24243E']}
+        colors={COLORS.gradientDark}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.2, y: 0 }}
         end={{ x: 0.8, y: 1 }}
       />
+      
+      {/* Decorative Blob */}
+      <View style={styles.blurBlob} />
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
 
-        {/* ── Header ── */}
-        <LinearGradient
-          colors={['#6C63FF', '#8B85FF']}
-          style={styles.header}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
-          <Text style={styles.headerTitle}>Progress & Analytics</Text>
+        {/* ── Header Card (Floating Frosted Panel) ── */}
+        <View style={[styles.headerCard, COLORS.glowIndigo]}>
+          <LinearGradient
+            colors={['rgba(108, 99, 255, 0.18)', 'rgba(255, 255, 255, 0.02)']}
+            style={StyleSheet.absoluteFill}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          />
+          <Text style={styles.headerTitle}>Analytics</Text>
           <Text style={styles.headerSub}>Your study performance overview</Text>
 
-          {/* Productivity score */}
+          {/* Productivity score row */}
           <View style={styles.scoreRow}>
             <View style={styles.scoreBadge}>
               <Text style={styles.scoreNum}>{compRate}%</Text>
@@ -168,16 +172,16 @@ export default function AnalyticsScreen({ navigation }) {
               <Text style={styles.scoreLabel}>Sessions Logged</Text>
             </View>
           </View>
-        </LinearGradient>
+        </View>
 
         <View style={styles.body}>
 
           {/* ── Quick Stats ── */}
           <SectionHeader emoji="📌" title="Task Overview" />
           <View style={styles.statsRow}>
-            <StatCard icon="checkmark-circle" label="Completed" value={completed} color={COLORS.success} />
-            <StatCard icon="time-outline"     label="Pending"   value={pending}   color={COLORS.primary} />
-            <StatCard icon="alert-circle"     label="Overdue"   value={overdue}   color={COLORS.error} />
+            <StatCard icon="checkmark-circle-outline" label="Completed" value={completed} color={COLORS.success} />
+            <StatCard icon="time-outline"             label="Pending"   value={pending}   color={COLORS.primaryLight} />
+            <StatCard icon="alert-circle-outline"     label="Overdue"   value={overdue}   color={COLORS.error} />
           </View>
 
           {/* ── Donut Chart — Task Status ── */}
@@ -191,18 +195,18 @@ export default function AnalyticsScreen({ navigation }) {
                     donut
                     radius={70}
                     innerRadius={46}
-                    innerCircleColor={'rgba(15,12,41,0.95)'}
+                    innerCircleColor={'#0D0B1F'}
                     centerLabelComponent={() => (
                       <View style={{ alignItems: 'center' }}>
-                        <Text style={{ color: '#fff', fontSize: 22, fontWeight: '800' }}>{compRate}%</Text>
-                        <Text style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>Done</Text>
+                        <Text style={{ color: '#fff', fontSize: 22, fontWeight: '900' }}>{compRate}%</Text>
+                        <Text style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: '700' }}>Done</Text>
                       </View>
                     )}
                   />
                   <View style={styles.legend}>
                     {[
                       { label: 'Completed', color: COLORS.success, val: completed },
-                      { label: 'Pending',   color: COLORS.primary, val: pending },
+                      { label: 'Pending',   color: COLORS.primaryLight, val: pending },
                       { label: 'Overdue',   color: COLORS.error,   val: overdue },
                     ].map(item => (
                       <View key={item.label} style={styles.legendItem}>
@@ -235,10 +239,10 @@ export default function AnalyticsScreen({ navigation }) {
                 roundedTop
                 hideRules
                 xAxisThickness={1}
-                xAxisColor={'rgba(255,255,255,0.1)'}
+                xAxisColor={'rgba(255,255,255,0.08)'}
                 yAxisThickness={0}
-                yAxisTextStyle={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}
-                xAxisLabelTextStyle={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}
+                yAxisTextStyle={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, fontWeight: '600' }}
+                xAxisLabelTextStyle={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: '600' }}
                 noOfSections={4}
                 maxValue={Math.max(...barData.map(d => d.value), 1) + 0.5}
                 isAnimated
@@ -264,7 +268,7 @@ export default function AnalyticsScreen({ navigation }) {
                   ]}>
                     {hasSessions && <Ionicons name="checkmark" size={12} color="#fff" />}
                   </View>
-                  <Text style={[styles.heatmapLabel, isToday && { color: COLORS.primary }]}>{label}</Text>
+                  <Text style={[styles.heatmapLabel, isToday && { color: COLORS.primaryLight }]}>{label}</Text>
                   <Text style={styles.heatmapDate}>{format(day, 'd')}</Text>
                 </View>
               ))}
@@ -318,63 +322,77 @@ export default function AnalyticsScreen({ navigation }) {
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: {
-    paddingTop: 56,
-    paddingBottom: 28,
-    paddingHorizontal: 24,
-    borderBottomLeftRadius: 28,
-    borderBottomRightRadius: 28,
+  blurBlob: {
+    position: 'absolute',
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: 'rgba(108, 99, 255, 0.08)',
+    top: 50,
+    right: -60,
   },
-  headerTitle: { fontSize: 24, fontWeight: '800', color: '#fff', marginBottom: 4 },
-  headerSub:   { fontSize: 13, color: 'rgba(255,255,255,0.7)', marginBottom: 20 },
+  headerCard: {
+    marginTop: 60,
+    marginHorizontal: 20,
+    borderRadius: 24,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+    overflow: 'hidden',
+    paddingVertical: 24,
+    paddingHorizontal: 20,
+  },
+  headerTitle: { fontSize: 28, fontWeight: '950', color: '#fff', marginBottom: 4, letterSpacing: -0.5 },
+  headerSub:   { fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 20, fontWeight: '500' },
   scoreRow: { flexDirection: 'row', gap: 12 },
   scoreBadge: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(255,255,255,0.04)',
     borderRadius: 14,
     paddingVertical: 12,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
-  scoreNum:   { fontSize: 20, fontWeight: '800', color: '#fff' },
-  scoreLabel: { fontSize: 10, color: 'rgba(255,255,255,0.7)', marginTop: 2, textAlign: 'center' },
+  scoreNum:   { fontSize: 20, fontWeight: '900', color: '#fff' },
+  scoreLabel: { fontSize: 10, color: 'rgba(255,255,255,0.5)', marginTop: 2, textAlign: 'center', fontWeight: '600' },
 
-  body: { padding: 20 },
+  body: { padding: 20, paddingTop: 8 },
 
-  sectionRow:  { flexDirection: 'row', alignItems: 'center', marginBottom: 12, marginTop: 8 },
+  sectionRow:  { flexDirection: 'row', alignItems: 'center', marginBottom: 12, marginTop: 12 },
   sectionEmoji:{ fontSize: 18, marginRight: 8 },
-  sectionTitle:{ fontSize: 15, fontWeight: '700', color: COLORS.textPrimary },
+  sectionTitle:{ fontSize: 14, fontWeight: '800', color: COLORS.textPrimary, textTransform: 'uppercase', letterSpacing: 0.8 },
 
   statsRow: { flexDirection: 'row', gap: 10, marginBottom: 20 },
   statCard: {
     flex: 1,
-    backgroundColor: COLORS.surface,
-    borderRadius: 14,
-    padding: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    borderRadius: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 8,
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   statIcon:  { width: 38, height: 38, borderRadius: 10, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
   statValue: { fontSize: 20, fontWeight: '800', color: COLORS.textPrimary },
-  statLabel: { fontSize: 10, color: COLORS.textSecondary, fontWeight: '600', marginTop: 2, textAlign: 'center' },
+  statLabel: { fontSize: 10, color: COLORS.textSecondary, fontWeight: '700', marginTop: 2, textAlign: 'center', textTransform: 'uppercase', letterSpacing: 0.3 },
   statSub:   { fontSize: 9, color: COLORS.textLight, marginTop: 2 },
 
   chartCard: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
     borderRadius: 18,
     padding: 18,
     marginBottom: 20,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
   },
 
   donutRow:   { flexDirection: 'row', alignItems: 'center', gap: 24 },
   legend:     { flex: 1, gap: 10 },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   dot:        { width: 10, height: 10, borderRadius: 5 },
-  legendText: { flex: 1, color: COLORS.textSecondary, fontSize: 13 },
-  legendVal:  { color: COLORS.textPrimary, fontWeight: '700', fontSize: 14 },
+  legendText: { flex: 1, color: COLORS.textSecondary, fontSize: 13, fontWeight: '600' },
+  legendVal:  { color: COLORS.textPrimary, fontWeight: '800', fontSize: 14 },
 
   heatmapRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
   heatmapCol: { alignItems: 'center', gap: 4 },
@@ -382,52 +400,52 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   heatmapActive: { backgroundColor: COLORS.success + 'CC', borderColor: COLORS.success },
-  heatmapToday:  { borderColor: COLORS.primary, borderWidth: 2 },
-  heatmapLabel:  { fontSize: 10, color: COLORS.textSecondary, fontWeight: '600' },
-  heatmapDate:   { fontSize: 9, color: COLORS.textLight },
+  heatmapToday:  { borderColor: COLORS.primaryLight, borderWidth: 2 },
+  heatmapLabel:  { fontSize: 10, color: COLORS.textSecondary, fontWeight: '700' },
+  heatmapDate:   { fontSize: 9, color: COLORS.textLight, fontWeight: '600' },
   heatmapLegend: { flexDirection: 'row', alignItems: 'center' },
   heatmapDot:    { width: 10, height: 10, borderRadius: 5, backgroundColor: COLORS.success, marginRight: 4 },
-  heatmapLegendText: { color: COLORS.textLight, fontSize: 11 },
+  heatmapLegendText: { color: COLORS.textLight, fontSize: 11, fontWeight: '600' },
 
   subjectCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
-    borderRadius: 14,
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    borderRadius: 16,
     padding: 16,
     marginBottom: 10,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.06)',
     gap: 12,
   },
   subjectDot:  { width: 12, height: 12, borderRadius: 6 },
-  subjectName: { fontSize: 14, fontWeight: '700', color: COLORS.textPrimary, marginBottom: 3 },
-  subjectMeta: { fontSize: 11, color: COLORS.textSecondary, marginBottom: 6 },
+  subjectName: { fontSize: 14, fontWeight: '800', color: COLORS.textPrimary, marginBottom: 3 },
+  subjectMeta: { fontSize: 11, color: COLORS.textSecondary, marginBottom: 6, fontWeight: '500' },
   progressTrack: {
     height: 5,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.06)',
     borderRadius: 3,
     overflow: 'hidden',
   },
   progressFill: { height: 5, borderRadius: 3 },
-  subjectPct: { fontSize: 15, fontWeight: '800' },
+  subjectPct: { fontSize: 15, fontWeight: '900' },
 
   emptyCard: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
     borderRadius: 16,
     padding: 28,
     alignItems: 'center',
     marginBottom: 20,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.06)',
   },
   emptyEmoji: { fontSize: 32, marginBottom: 10 },
-  emptyText:  { color: COLORS.textSecondary, fontSize: 13, textAlign: 'center', lineHeight: 20 },
+  emptyText:  { color: COLORS.textSecondary, fontSize: 13, textAlign: 'center', lineHeight: 20, fontWeight: '600' },
 });
