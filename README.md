@@ -44,12 +44,12 @@ StudyNova is a premium, state-of-the-art academic planner designed for students 
 
 ```mermaid
 graph TD
-    subgraph Frontend Client (Expo/React Native)
+    subgraph "Frontend Client (Expo/React Native)"
         UI[Aesthetic Dark-Theme UI] --> Store[Zustand Stores: Auth, Task, Subject, Timetable, Timer]
         Store --> Service[Axios HTTP Services]
     end
 
-    subgraph Backend REST API (Spring Boot)
+    subgraph "Backend REST API (Spring Boot)"
         Service --> Controller[REST Controllers]
         Controller --> Sec[Spring Security & JWT Auth Filter]
         Sec --> SVC[Services: Auth, Task, Subject, Timetable, AI]
@@ -57,7 +57,7 @@ graph TD
         SVC --> Gemini[Gemini Pro API]
     end
 
-    subgraph Database
+    subgraph "Database"
         Repos --> Mongo[(MongoDB Instance)]
     end
 ```
